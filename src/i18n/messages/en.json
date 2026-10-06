@@ -1,0 +1,56 @@
+{
+  "common": {
+    "switchTo": "العربية",
+    "theme": { "toggle": "Toggle dark mode" }
+  },
+  "nav": {
+    "home": "Home",
+    "signIn": "Sign in",
+    "account": "My account",
+    "signOut": "Sign out"
+  },
+  "home": {
+    "heroTitle": "Welcome to {storeName}",
+    "heroSubtitle": "Our new collection is on its way."
+  },
+  "auth": {
+    "signInTitle": "Sign in",
+    "signUpTitle": "Create your account",
+    "name": "Full name",
+    "email": "Email",
+    "password": "Password",
+    "phone": "Phone (optional)",
+    "passwordHint": "At least 8 characters",
+    "submitSignIn": "Sign in",
+    "submitSignUp": "Create account",
+    "noAccount": "New here?",
+    "createOne": "Create an account",
+    "haveAccount": "Already have an account?"
+  },
+  "account": {
+    "title": "My account",
+    "greeting": "Hello, {name}"
+  },
+  "footer": {
+    "rights": "© {year} {storeName}. All rights reserved."
+  },
+  "admin": {
+    "loginTitle": "Admin sign in",
+    "overview": "Overview",
+    "welcome": "Welcome back, {name}",
+    "overviewSoon": "Store metrics will appear here.",
+    "goToStore": "Go to storefront",
+    "signOut": "Sign out",
+    "noAccess": "You don't have permission to view this page.",
+    "sections": { "main": "Main" }
+  },
+  "errors": {
+    "VALIDATION": "Please check the fields and try again.",
+    "INVALID_CREDENTIALS": "Email or password is incorrect.",
+    "EMAIL_TAKEN": "An account with this email already exists.",
+    "RATE_LIMITED": "Too many attempts. Please try again in 15 minutes.",
+    "FORBIDDEN": "You don't have permission to do that.",
+    "NOT_FOUND": "Not found.",
+    "UNKNOWN": "Something went wrong. Please try again."
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "common": {
+    "switchTo": "English",
+    "theme": { "toggle": "تبديل الوضع الداكن" }
+  },
+  "nav": {
+    "home": "الرئيسية",
+    "signIn": "تسجيل الدخول",
+    "account": "حسابي",
+    "signOut": "تسجيل الخروج"
+  },
+  "home": {
+    "heroTitle": "أهلاً بك في {storeName}",
+    "heroSubtitle": "مجموعتنا الجديدة في الطريق."
+  },
+  "auth": {
+    "signInTitle": "تسجيل الدخول",
+    "signUpTitle": "إنشاء حساب جديد",
+    "name": "الاسم بالكامل",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "phone": "رقم الهاتف (اختياري)",
+    "passwordHint": "٨ أحرف على الأقل",
+    "submitSignIn": "تسجيل الدخول",
+    "submitSignUp": "إنشاء الحساب",
+    "noAccount": "جديد هنا؟",
+    "createOne": "أنشئ حساباً",
+    "haveAccount": "لديك حساب بالفعل؟"
+  },
+  "account": {
+    "title": "حسابي",
+    "greeting": "مرحباً، {name}"
+  },
+  "footer": {
+    "rights": "© {year} {storeName}. جميع الحقوق محفوظة."
+  },
+  "admin": {
+    "loginTitle": "دخول الإدارة",
+    "overview": "نظرة عامة",
+    "welcome": "مرحباً بعودتك، {name}",
+    "overviewSoon": "ستظهر مؤشرات المتجر هنا.",
+    "goToStore": "الذهاب إلى المتجر",
+    "signOut": "تسجيل الخروج",
+    "noAccess": "ليست لديك صلاحية لعرض هذه الصفحة.",
+    "sections": { "main": "الرئيسية" }
+  },
+  "errors": {
+    "VALIDATION": "يرجى مراجعة الحقول والمحاولة مرة أخرى.",
+    "INVALID_CREDENTIALS": "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
+    "EMAIL_TAKEN": "يوجد حساب بهذا البريد الإلكتروني بالفعل.",
+    "RATE_LIMITED": "محاولات كثيرة. حاول مرة أخرى بعد ١٥ دقيقة.",
+    "FORBIDDEN": "ليست لديك صلاحية للقيام بذلك.",
+    "NOT_FOUND": "غير موجود.",
+    "UNKNOWN": "حدث خطأ ما. حاول مرة أخرى."
+  }
+}
