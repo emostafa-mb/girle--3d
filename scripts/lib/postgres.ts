@@ -17,6 +17,7 @@ export async function startPostgres(opts: {
     password: PG_PASSWORD,
     port: opts.port,
     persistent: opts.persistent ?? true,
+    initdbFlags: ['--encoding=UTF8', '--locale=C'],
   });
   if (!existsSync(path.join(opts.dir, 'PG_VERSION'))) await pg.initialise();
   await pg.start();
