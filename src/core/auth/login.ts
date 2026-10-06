@@ -18,12 +18,25 @@ function validationError(error: z.ZodError): DomainError {
   });
 }
 
-async function assertNotRateLimited(db: DbClient, storeId: string, realm: Realm, email: string, now: Date) {
+/**
+ * Records a (pessimistic) failed attempt BEFORE the slow password check, then counts failures
+ * including it, so concurrent requests cannot all slip under the limit.
+ */
+async function beginAttempt(db: DbClient, storeId: string, realm: Realm, email: string, now: Date): Promise<string> {
+  const attempt = await db.loginAttempt.create({ data: { storeId, realm, email, success: false, createdAt: now } });
   const since = new Date(now.getTime() - RATE_LIMIT.windowMs);
   const failures = await db.loginAttempt.count({
     where: { storeId, realm, email, success: false, createdAt: { gt: since } },
   });
-  if (failures >= RATE_LIMIT.maxFailures) throw new DomainError('RATE_LIMITED');
+  if (failures > RATE_LIMIT.maxFailures) {
+    await db.loginAttempt.deleteMany({ where: { id: attempt.id } }); // blocked attempts don't extend the lockout
+    throw new DomainError('RATE_LIMITED');
+  }
+  return attempt.id;
+}
+
+async function finishAttempt(db: DbClient, attemptId: string, success: boolean) {
+  if (success) await db.loginAttempt.update({ where: { id: attemptId }, data: { success: true } });
 }
 
 let dummyHash: Promise<string> | undefined;
@@ -34,10 +47,6 @@ async function burnVerifyTime(password: string): Promise<false> {
   return false;
 }
 
-async function recordAttempt(db: DbClient, storeId: string, realm: Realm, email: string, success: boolean, now: Date) {
-  await db.loginAttempt.create({ data: { storeId, realm, email, success, createdAt: now } });
-}
-
 type LoginInput = { storeId: string; email: string; password: string; now?: Date };
 
 export async function loginAdmin(db: DbClient, input: LoginInput) {
@@ -45,14 +54,14 @@ export async function loginAdmin(db: DbClient, input: LoginInput) {
   if (!parsed.success) throw validationError(parsed.error);
   const now = input.now ?? new Date();
   const email = normalizeEmail(parsed.data.email);
-  await assertNotRateLimited(db, input.storeId, 'ADMIN', email, now);
+  const attemptId = await beginAttempt(db, input.storeId, 'ADMIN', email, now);
 
   const admin = await db.admin.findUnique({ where: { storeId_email: { storeId: input.storeId, email } } });
   const ok =
     admin && admin.isActive
       ? await verifyPassword(admin.passwordHash, parsed.data.password)
       : await burnVerifyTime(parsed.data.password);
-  await recordAttempt(db, input.storeId, 'ADMIN', email, ok, now);
+  await finishAttempt(db, attemptId, !!ok);
   if (!ok || !admin) throw new DomainError('INVALID_CREDENTIALS');
 
   await db.admin.update({ where: { id: admin.id }, data: { lastLoginAt: now } });
@@ -72,14 +81,14 @@ export async function loginCustomer(db: DbClient, input: LoginInput) {
   if (!parsed.success) throw validationError(parsed.error);
   const now = input.now ?? new Date();
   const email = normalizeEmail(parsed.data.email);
-  await assertNotRateLimited(db, input.storeId, 'CUSTOMER', email, now);
+  const attemptId = await beginAttempt(db, input.storeId, 'CUSTOMER', email, now);
 
   const customer = await db.customer.findUnique({ where: { storeId_email: { storeId: input.storeId, email } } });
   const ok =
     customer && !customer.deletedAt
       ? await verifyPassword(customer.passwordHash, parsed.data.password)
       : await burnVerifyTime(parsed.data.password);
-  await recordAttempt(db, input.storeId, 'CUSTOMER', email, ok, now);
+  await finishAttempt(db, attemptId, !!ok);
   if (!ok || !customer) throw new DomainError('INVALID_CREDENTIALS');
 
   const session = await createSession(db, { storeId: input.storeId, realm: 'CUSTOMER', subjectId: customer.id, now });

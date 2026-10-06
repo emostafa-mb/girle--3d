@@ -69,6 +69,20 @@ describe('loginCustomer', () => {
     await expectCode(loginCustomer(db, { storeId, email: 'sara@example.com', password: 'secret123' }), 'INVALID_CREDENTIALS');
   });
 
+  it('concurrent wrong-password attempts never get more than the limit verified', async () => {
+    const t0 = new Date('2026-03-01T10:00:00Z');
+    const results = await Promise.allSettled(
+      Array.from({ length: 12 }, () =>
+        loginCustomer(db, { storeId, email: 'sara@example.com', password: 'wrong-pass', now: t0 }),
+      ),
+    );
+    const codes = results.map((r) => (r.status === 'rejected' ? (r.reason as { code?: string }).code : 'OK'));
+    expect(codes.filter((c) => c === 'INVALID_CREDENTIALS').length).toBeLessThanOrEqual(RATE_LIMIT.maxFailures);
+    expect(codes.every((c) => c === 'INVALID_CREDENTIALS' || c === 'RATE_LIMITED')).toBe(true);
+    const failures = await db.loginAttempt.count({ where: { email: 'sara@example.com', success: false } });
+    expect(failures).toBeLessThanOrEqual(RATE_LIMIT.maxFailures);
+  });
+
   it(`rate-limits after ${RATE_LIMIT.maxFailures} failures, even with the right password, until the window passes`, async () => {
     const t0 = new Date('2026-01-01T10:00:00Z');
     for (let i = 0; i < RATE_LIMIT.maxFailures; i++) {
