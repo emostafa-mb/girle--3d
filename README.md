@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Store Platform
 
-## Getting Started
+Rebrandable e-commerce storefront + admin dashboard (Next.js, PostgreSQL, Prisma).
+Design: `docs/superpowers/specs/2026-10-06-ecommerce-platform-design.md`.
 
-First, run the development server:
+## Requirements
+
+- Node.js 24+ and npm
+- No database install needed — Postgres runs from `embedded-postgres`.
+
+## First-time setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env        # then change SEED_ADMIN_PASSWORD
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Terminal 1 — start the database (leave it running):
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run db
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Terminal 2:
 
-## Learn More
+```bash
+npm run setup               # apply migrations + seed store, settings, Owner admin
+npm run dev                 # http://localhost:3000
+```
 
-To learn more about Next.js, take a look at the following resources:
+- Storefront: http://localhost:3000/en (Arabic: /ar)
+- Admin: http://localhost:3000/en/admin — sign in with `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Tests
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Command | What it runs |
+|---|---|
+| `npm test` | Unit tests (`src/**/*.test.ts` and `scripts/**/*.test.ts`) |
+| `npm run test:int` | Integration tests against a throwaway Postgres (`*.int.test.ts`) |
+| `npm run test:e2e` | Playwright: builds the app, fresh DB on port 54331, app on port 3100. A `posttest:e2e` hook then stops only the processes this project started |
+| `npm run lint` / `npm run typecheck` | ESLint / TypeScript |
 
-## Deploy on Vercel
+CI (`.github/workflows/ci.yml`) runs all of the above on every push and pull request.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Project layout
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `src/core` — business logic, framework-free, unit/integration tested
+- `src/server` — Next.js glue: sessions, server actions, cached loaders
+- `src/app/[locale]` — pages (`(store)` storefront, `admin` dashboard)
+- `src/brand/brand.config.ts` — per-client defaults (name, colour, locale, currency)
+- `src/i18n/messages` — English and Arabic UI text
+- `prisma/` — schema, migrations, seed
+
+## Changing the database schema
+
+```bash
+npm run db:migrate -- --name describe_change
+```
+
+## Troubleshooting
+
+- **Windows: `ERR_SWC_NATIVE_CACHE` from `npm run dev` / `npm run build`** — set
+  `SWC_NATIVE_BINDING_CACHE` to a writable folder, e.g. `.cache/swc` (git-ignored; the
+  e2e server already does this). In Git Bash: `SWC_NATIVE_BINDING_CACHE=.cache/swc npm run dev`.
