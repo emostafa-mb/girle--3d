@@ -100,10 +100,14 @@ function describeProcess(pid: string): Proc | null {
 
 const norm = (v: string) => v.split(String.fromCharCode(92)).join('/').toLowerCase();
 
+export function isOwnedCommandLine(kind: ListenerKind, image: string, cmdline: string, repoRoot: string): boolean {
+  const cmd = norm(cmdline);
+  if (kind === 'postgres') return image.toLowerCase() === 'postgres.exe' && cmd.includes('embedded-postgres');
+  return cmd.includes(`${norm(repoRoot).replace(/\/+$/, '')}/`) && cmd.includes('node_modules/next');
+}
+
 function isOwned(kind: ListenerKind, proc: Proc): boolean {
-  if (kind === 'postgres') return proc.image.toLowerCase() === 'postgres.exe' && norm(proc.cmd).includes('embedded-postgres');
-  const cmd = norm(proc.cmd);
-  return cmd.includes(norm(process.cwd())) && cmd.includes('next');
+  return isOwnedCommandLine(kind, proc.image, proc.cmd, process.cwd());
 }
 
 /**
@@ -120,7 +124,8 @@ export function killOwnedListeners(ports: { port: number; kind: ListenerKind }[]
     console.warn('[e2e] could not run netstat; skipping port cleanup:', err);
     return;
   }
-  for (const line of out.split(/\r?\n/)) {
+  const errors: string[] = [];
+  for (const line of out.split(String.fromCharCode(10))) {
     const m = line.trim().match(/^TCP\s+\S+:(\d+)\s+\S+\s+LISTENING\s+(\d+)$/);
     if (!m) continue;
     const target = ports.find((p) => p.port === Number(m[1]));
@@ -132,9 +137,10 @@ export function killOwnedListeners(ports: { port: number; kind: ListenerKind }[]
       continue;
     }
     if (!isOwned(target.kind, proc)) {
-      throw new Error(
+      errors.push(
         `Port ${target.port} is in use by PID ${pid} (${proc.image}), which this project did not start. Stop it and retry.`,
       );
+      continue;
     }
     try {
       execFileSync('taskkill', ['/PID', pid, '/T', '/F'], { stdio: 'ignore' });
@@ -142,4 +148,5 @@ export function killOwnedListeners(ports: { port: number; kind: ListenerKind }[]
       // already gone
     }
   }
+  if (errors.length) throw new Error(errors.join(String.fromCharCode(10)));
 }

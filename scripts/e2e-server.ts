@@ -10,11 +10,17 @@ const PG_PORT = 54331;
 
 async function main() {
   // Self-heal leftovers from a previously crashed run.
-  killOwnedListeners([
-    { port: PORT, kind: 'app' },
-    { port: PG_PORT, kind: 'postgres' },
-  ]);
+  let foreign: unknown;
+  try {
+    killOwnedListeners([
+      { port: PORT, kind: 'app' },
+      { port: PG_PORT, kind: 'postgres' },
+    ]);
+  } catch (err) {
+    foreign = err; // owned ports were still cleaned; abort after the sweep
+  }
   killOrphanedWorkers();
+  if (foreign) throw foreign;
   await waitForPortFree(PG_PORT);
 
   const dir = mkdtempSync(path.join(tmpdir(), 'shop-e2e-'));

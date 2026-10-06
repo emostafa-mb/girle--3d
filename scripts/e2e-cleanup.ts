@@ -6,6 +6,10 @@ try {
     { port: 3100, kind: 'app' },
     { port: 54331, kind: 'postgres' },
   ]);
+} catch (err) {
+  console.warn('[e2e-cleanup]', err instanceof Error ? err.message : err);
+}
+try {
   killOrphanedWorkers();
 } catch (err) {
   console.warn('[e2e-cleanup]', err instanceof Error ? err.message : err);
