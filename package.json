@@ -11,6 +11,7 @@
     "test": "vitest run --project unit",
     "test:int": "vitest run --project integration",
     "test:e2e": "playwright test",
+    "posttest:e2e": "tsx scripts/e2e-cleanup.ts",
     "db": "tsx scripts/db-dev.ts",
     "db:migrate": "prisma migrate dev",
     "setup": "prisma migrate deploy && prisma db seed",
