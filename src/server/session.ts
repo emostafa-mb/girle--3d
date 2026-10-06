@@ -5,6 +5,7 @@ import { cache } from 'react';
 import { assertPermission, hasPermission, type Permission } from '@/core/auth/permissions';
 import { type Realm, validateSession } from '@/core/auth/sessions';
 import { DomainError } from '@/core/errors';
+import { safeLocale } from '@/core/i18n/locales';
 import { SESSION_COOKIE } from './cookie-names';
 import { db } from './db';
 
@@ -54,13 +55,13 @@ export const getCurrentCustomer = cache(async () => {
 
 export async function requireAdmin(locale: string): Promise<CurrentAdmin> {
   const admin = await getCurrentAdmin();
-  if (!admin) redirect(`/${locale}/admin/login`);
+  if (!admin) redirect(`/${safeLocale(locale)}/admin/login`);
   return admin;
 }
 
 export async function requireCustomer(locale: string) {
   const customer = await getCurrentCustomer();
-  if (!customer) redirect(`/${locale}/auth/signin`);
+  if (!customer) redirect(`/${safeLocale(locale)}/auth/signin`);
   return customer;
 }
 

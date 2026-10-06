@@ -3,7 +3,7 @@
 import { redirect } from 'next/navigation';
 import { loginAdmin, loginCustomer, registerCustomer } from '@/core/auth/login';
 import { revokeSession } from '@/core/auth/sessions';
-import { DEFAULT_LOCALE, isLocale, type Locale } from '@/core/i18n/locales';
+import { type Locale, safeLocale } from '@/core/i18n/locales';
 import { type ActionState, toActionState } from '../action-result';
 import { db } from '../db';
 import { clearSessionCookie, readSessionToken, setSessionCookie } from '../session';
@@ -15,8 +15,7 @@ function field(fd: FormData, name: string): string {
 }
 
 function readLocale(fd: FormData): Locale {
-  const v = field(fd, 'locale');
-  return isLocale(v) ? v : DEFAULT_LOCALE;
+  return safeLocale(field(fd, 'locale'));
 }
 
 export async function customerSignInAction(_prev: ActionState, fd: FormData): Promise<ActionState> {

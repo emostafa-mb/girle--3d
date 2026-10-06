@@ -3,14 +3,17 @@ import { mkdirSync, mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { E2E } from '../tests/e2e/fixtures';
-import { killListeners, killOrphanedWorkers, startPostgres, waitForPortFree } from './lib/postgres';
+import { killOwnedListeners, killOrphanedWorkers, startPostgres, waitForPortFree } from './lib/postgres';
 
 const PORT = 3100;
 const PG_PORT = 54331;
 
 async function main() {
   // Self-heal leftovers from a previously crashed run.
-  killListeners([PORT, PG_PORT]);
+  killOwnedListeners([
+    { port: PORT, kind: 'app' },
+    { port: PG_PORT, kind: 'postgres' },
+  ]);
   killOrphanedWorkers();
   await waitForPortFree(PG_PORT);
 

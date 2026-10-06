@@ -8,6 +8,10 @@ export function isLocale(value: string): value is Locale {
   return (LOCALES as readonly string[]).includes(value);
 }
 
+export function safeLocale(value: string): Locale {
+  return isLocale(value) ? value : DEFAULT_LOCALE;
+}
+
 export function isRtl(locale: string): boolean {
   return RTL_LOCALES.includes(locale);
 }

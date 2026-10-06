@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
+import { safeLocale } from '@/core/i18n/locales';
 import { SignUpForm } from '@/components/store/sign-up-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Link } from '@/i18n/navigation';
@@ -7,7 +8,7 @@ import { getCurrentCustomer } from '@/server/session';
 
 export default async function SignUpPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  if (await getCurrentCustomer()) redirect(`/${locale}/account`);
+  if (await getCurrentCustomer()) redirect(`/${safeLocale(locale)}/account`);
   const t = await getTranslations('auth');
   return (
     <div className="mx-auto max-w-md px-4 py-16">

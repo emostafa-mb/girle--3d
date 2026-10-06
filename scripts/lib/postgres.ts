@@ -75,21 +75,69 @@ export async function waitForPortFree(port: number, timeoutMs = 20_000): Promise
   }
 }
 
+export type ListenerKind = 'postgres' | 'app';
+
+type Proc = { image: string; cmd: string };
+
+function describeProcess(pid: string): Proc | null {
+  try {
+    const out = execFileSync(
+      'powershell',
+      [
+        '-NoProfile',
+        '-Command',
+        `$p = Get-CimInstance Win32_Process -Filter "ProcessId=${Number(pid)}"; if ($p) { $p.Name + [char]9 + $p.CommandLine }`,
+      ],
+      { encoding: 'utf8' },
+    ).trim();
+    if (!out) return null;
+    const [image = '', ...rest] = out.split('\t');
+    return { image, cmd: rest.join('\t') };
+  } catch {
+    return null;
+  }
+}
+
+const norm = (v: string) => v.split(String.fromCharCode(92)).join('/').toLowerCase();
+
+function isOwned(kind: ListenerKind, proc: Proc): boolean {
+  if (kind === 'postgres') return proc.image.toLowerCase() === 'postgres.exe' && norm(proc.cmd).includes('embedded-postgres');
+  const cmd = norm(proc.cmd);
+  return cmd.includes(norm(process.cwd())) && cmd.includes('next');
+}
+
 /**
- * Playwright force-kills this process on Windows, so shutdown handlers may never run and the e2e
- * postmaster can outlive us. These ports are dedicated to e2e, so free them before starting.
+ * Windows only. Kills listeners on the given e2e ports, but only processes this project demonstrably
+ * owns (embedded postgres, or a `next` process started from this repo). Any other listener causes a
+ * thrown error and is never killed. Failures to inspect the system are logged and skipped.
  */
-export function killListeners(ports: number[]): void {
+export function killOwnedListeners(ports: { port: number; kind: ListenerKind }[]): void {
   if (process.platform !== 'win32') return;
-  const out = execSync('netstat -ano -p tcp', { encoding: 'utf8' });
-  const pids = new Set<string>();
+  let out: string;
+  try {
+    out = execSync('netstat -ano', { encoding: 'utf8' });
+  } catch (err) {
+    console.warn('[e2e] could not run netstat; skipping port cleanup:', err);
+    return;
+  }
   for (const line of out.split(/\r?\n/)) {
     const m = line.trim().match(/^TCP\s+\S+:(\d+)\s+\S+\s+LISTENING\s+(\d+)$/);
-    if (m && ports.includes(Number(m[1]))) pids.add(m[2]);
-  }
-  for (const pid of pids) {
+    if (!m) continue;
+    const target = ports.find((p) => p.port === Number(m[1]));
+    const pid = m[2];
+    if (!target || pid === '0' || pid === '4') continue;
+    const proc = describeProcess(pid);
+    if (!proc) {
+      console.warn(`[e2e] could not inspect PID ${pid} on port ${target.port}; leaving it alone`);
+      continue;
+    }
+    if (!isOwned(target.kind, proc)) {
+      throw new Error(
+        `Port ${target.port} is in use by PID ${pid} (${proc.image}), which this project did not start. Stop it and retry.`,
+      );
+    }
     try {
-      execSync(`taskkill /PID ${pid} /T /F`, { stdio: 'ignore' });
+      execFileSync('taskkill', ['/PID', pid, '/T', '/F'], { stdio: 'ignore' });
     } catch {
       // already gone
     }
