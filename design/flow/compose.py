@@ -24,12 +24,12 @@ FILMS = {
         # opening: products and drops falling (cut before that clip's own G appears)
         (0.0, 3.6, ('video', 'Cosmetics_products_drop_on_floor_20261017205059.mp4', 0.0, 3.6)),
         (3.0, 6.6, ('video', 'Fruit_pieces_and_oil_splash_20261017201611.mp4', 2.0, 5.6)),
-        (6.0, 9.6, ('video', 'Coconut_milk_and_oil_swirl_20261017203607.mp4', 1.5, 5.1)),
-        (9.0, 12.6, ('video', 'Ingredients_whipping_into_pink_b…_20261017203443.mp4', 0.8, 4.4)),
+        (6.0, 9.6, ('video', 'Ingredients_whipping_into_pink_b…_20261017203443.mp4', 0.8, 4.4)),
+        (9.0, 12.6, ('video', 'Coconut_milk_and_oil_swirl_20261017203607.mp4', 1.5, 5.1)),
         (12.0, 15.6, ('video', 'Fruits_and_petals_drifting_20261017204030.mp4', 1.5, 5.1)),
         (15.0, 18.5, ('frames', 84, 120)),
     ],
-    'body-butter': [
+    'body-scrub': [  # Flow clips were made as 'body butter'; the jar ending prints Body scrub
         (0.0, 10.0, ('video', 'Ingredients_whipping_into_pink_b…_20261017203443.mp4', 0.0, 10.0)),
         (9.4, 13.9, ('video', 'Body_butter_jar_closing_20261017203452.mp4', 0.0, 4.5)),  # before Flow's own label
         (13.3, 16.9, ('frames', 92, 120)),  # the lid settles, the print wraps, the G rises

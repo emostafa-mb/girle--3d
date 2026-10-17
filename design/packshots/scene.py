@@ -195,7 +195,7 @@ def body_butter():
             th = math.atan2(v.co.y, v.co.x)
             k = 1 + (0.03 * (0.5 + 0.5 * math.cos(120 * th))) / r
             v.co.x *= k; v.co.y *= k
-    pr = band('butter_print', 3.505, 0.9, 4.1, 105, os.path.join(TEX, 'butter.png'))
+    pr = band('butter_print', 3.505, 0.9, 4.1, 105, os.path.join(TEX, 'scrub.png'))
     return [jar, cream, lid, pr], (7.3, 6.42)
 
 def body_lotion():
@@ -533,7 +533,8 @@ def film(k):
 
 def brand_film():
     """Home page: the four products drop into a line-up in routine order, the G rises behind."""
-    order = [('wash', -10.8), ('lotion', -3.6), ('butter', 3.9), ('mist', 11.0)]
+    # routine order; the 'butter' jar is the body scrub
+    order = [('wash', -10.8), ('butter', -3.2), ('lotion', 4.0), ('mist', 11.0)]
     show_only({'wash', 'lotion', 'butter', 'mist', 'G'})
     roots = []
     for i, (k, x) in enumerate(order):

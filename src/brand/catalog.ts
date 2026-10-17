@@ -40,6 +40,24 @@ export const starterProducts: readonly StarterProduct[] = [
     stepNote: { en: 'In the shower', ar: 'أثناء الاستحمام' },
   },
   {
+    slug: 'body-scrub',
+    name: { en: 'Body scrub', ar: 'مقشّر الجسم' },
+    tagline: { en: 'A whipped sugar scrub for smooth skin.', ar: 'مقشّر سكر مخفوق لبشرة ناعمة.' },
+    description: {
+      en: 'A soft, whipped sugar scrub that buffs away dry, dull skin and leaves it smooth. Use it in the shower two or three times a week.',
+      ar: 'مقشّر سكر ناعم ومخفوق يزيل الجلد الجاف الباهت ويتركه ناعماً. استخدميه أثناء الاستحمام مرتين أو ثلاث مرات أسبوعياً.',
+    },
+    howTo: {
+      en: 'On wet skin, massage a small scoop in gentle circles, then rinse. Skip freshly shaved or irritated skin.',
+      ar: 'على بشرة مبللة، دلّكي كمية صغيرة بحركات دائرية لطيفة ثم اشطفيها. تجنّبي البشرة الحليقة حديثاً أو المتهيّجة.',
+    },
+    size: { en: '200 g', ar: '٢٠٠ جم' },
+    price: 42000,
+    images: { front: '/products/body-scrub-packshot.jpg', detail: '/products/body-scrub-detail.jpg' },
+    step: 2,
+    stepNote: { en: 'After washing, two or three times a week', ar: 'بعد الغسول، مرتين أو ثلاث مرات أسبوعياً' },
+  },
+  {
     slug: 'body-lotion',
     name: { en: 'Body lotion', ar: 'لوشن الجسم' },
     tagline: { en: 'A light daily lotion that sinks in fast.', ar: 'لوشن يومي خفيف يمتصه الجلد بسرعة.' },
@@ -54,26 +72,8 @@ export const starterProducts: readonly StarterProduct[] = [
     size: { en: '150 ml', ar: '١٥٠ مل' },
     price: 35000,
     images: { front: '/products/body-lotion-packshot.jpg', detail: '/products/body-lotion-detail.jpg' },
-    step: 2,
-    stepNote: { en: 'Right after, on damp skin', ar: 'بعده مباشرة على بشرة رطبة' },
-  },
-  {
-    slug: 'body-butter',
-    name: { en: 'Body butter', ar: 'زبدة الجسم' },
-    tagline: { en: 'A whipped butter for dry spots.', ar: 'زبدة مخفوقة للمناطق الجافة.' },
-    description: {
-      en: 'A rich, whipped butter for the places that dry out first: elbows, knees, heels and hands. A little goes a long way.',
-      ar: 'زبدة غنية مخفوقة للمناطق التي تجف أولاً: المرفقين والركبتين والكعبين واليدين. كمية صغيرة تكفي.',
-    },
-    howTo: {
-      en: 'Warm a small scoop between your fingertips and press it into dry areas. Best at night.',
-      ar: 'دفّئي كمية صغيرة بين أطراف أصابعك واضغطيها على المناطق الجافة. الأفضل ليلاً.',
-    },
-    size: { en: '200 ml', ar: '٢٠٠ مل' },
-    price: 42000,
-    images: { front: '/products/body-butter-packshot.jpg', detail: '/products/body-butter-detail.jpg' },
     step: 3,
-    stepNote: { en: 'On dry spots, best at night', ar: 'على المناطق الجافة، والأفضل ليلاً' },
+    stepNote: { en: 'Right after, on damp skin', ar: 'بعده مباشرة على بشرة رطبة' },
   },
   {
     slug: 'body-mist',

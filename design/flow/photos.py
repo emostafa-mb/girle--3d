@@ -21,7 +21,7 @@ W, H = 576, 720  # a 4:5 window out of the 1280x720 frame
 INGREDIENTS = {
     'body-wash': ('Fruit_pieces_and_oil_splash_20261017201611.mp4', 3.4, 640),
     'body-lotion': ('Coconut_milk_and_oil_swirl_20261017203607.mp4', 3.0, 830),
-    'body-butter': ('Ingredients_whipping_into_pink_b…_20261017203443.mp4', 2.5, 600),
+    'body-scrub': ('Ingredients_whipping_into_pink_b…_20261017203443.mp4', 2.5, 600),
     'body-mist': ('Fruits_and_petals_drifting_20261017204030.mp4', 3.6, 640),
 }
 WASH_BOTTLE = ('Fruit_and_oil_blending_20261017201620.mp4', 9.95)
@@ -30,7 +30,7 @@ WASH_GEOMETRY = (640, 100, 430, 150)
 # Stills with blank packaging (design/flow/stills/<slug>.jpg) -> label and the same geometry, in pixels.
 STILLS = {
     'body-lotion': ('lotion.png', (448, 103, 723, 150)),
-    'body-butter': ('butter.png', (447, 215, 782, 200)),
+    'body-scrub': ('scrub.png', (447, 215, 782, 200)),
     'body-mist': ('mist.png', (449, 94, 766, 140)),
 }
 

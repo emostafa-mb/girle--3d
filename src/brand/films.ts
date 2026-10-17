@@ -68,14 +68,14 @@ const FLOW_FILMS: Record<string, { count: number; reveal: number; stages: FilmSt
     ],
   },
 };
-FLOW_FILMS['body-butter'] = {
+FLOW_FILMS['body-scrub'] = {
   count: 150,
   reveal: 0.95,
   stages: [
     {
       from: 0.03,
       to: 0.3,
-      title: { en: 'The butters', ar: 'الزبدة' },
+      title: { en: 'The ingredients', ar: 'المكونات' },
       body: {
         en: 'Inspired by shea and cocoa butter, rose petals and rosehip oil.',
         ar: 'مستوحاة من زبدة الشيا والكاكاو وبتلات الورد وزيت ثمر الورد.',
@@ -85,7 +85,7 @@ FLOW_FILMS['body-butter'] = {
       from: 0.32,
       to: 0.58,
       title: { en: 'The whip', ar: 'الخفق' },
-      body: { en: 'Melted, then whipped into a soft pink butter.', ar: 'تُذاب ثم تُخفق لتصبح زبدة وردية ناعمة.' },
+      body: { en: 'Whipped with fine sugar into a soft pink scrub.', ar: 'تُخفق مع السكر الناعم لتصبح مقشّراً وردياً ناعماً.' },
     },
     {
       from: 0.6,
@@ -98,8 +98,8 @@ FLOW_FILMS['body-butter'] = {
       to: 0.94,
       title: { en: 'The finish', ar: 'اللمسة الأخيرة' },
       body: {
-        en: 'Printed with the GIRLÉ G. For the spots that dry out first.',
-        ar: 'مطبوع عليه شعار GIRLÉ. للمناطق التي تجف أولاً.',
+        en: 'Printed with the GIRLÉ G. For smooth skin, two or three times a week.',
+        ar: 'مطبوع عليه شعار GIRLÉ. لبشرة ناعمة، مرتين أو ثلاث مرات أسبوعياً.',
       },
     },
   ],
@@ -209,11 +209,11 @@ const STAGE_COPY: Record<string, Localized[]> = {
     { en: 'A flip cap for one-handed use.', ar: 'غطاء قلّاب يُستخدم بيد واحدة.' },
     { en: 'Printed with the GIRLÉ G. Right after the shower, on damp skin.', ar: 'مطبوع عليه شعار GIRLÉ. بعد الاستحمام مباشرة على بشرة رطبة.' },
   ],
-  'body-butter': [
-    { en: 'Whipped, rich and soft.', ar: 'مخفوقة، غنية وناعمة.' },
-    { en: 'Piped into a wide clear jar you can scoop from.', ar: 'تُملأ في برطمان شفاف واسع يسهل الأخذ منه.' },
+  'body-scrub': [
+    { en: 'A whipped sugar scrub, soft and rich.', ar: 'مقشّر سكر مخفوق، ناعم وغني.' },
+    { en: 'Piped into a wide clear jar you can scoop from.', ar: 'يُملأ في برطمان شفاف واسع يسهل الأخذ منه.' },
     { en: 'A screw lid that closes tight between uses.', ar: 'غطاء محكم يُغلق جيداً بين الاستخدامات.' },
-    { en: 'Printed with the GIRLÉ G. For the spots that dry out first.', ar: 'مطبوع عليه شعار GIRLÉ. للمناطق التي تجف أولاً.' },
+    { en: 'Printed with the GIRLÉ G. For smooth skin, two or three times a week.', ar: 'مطبوع عليه شعار GIRLÉ. لبشرة ناعمة، مرتين أو ثلاث مرات أسبوعياً.' },
   ],
   'body-mist': [
     { en: 'A fine, even mist.', ar: 'رذاذ ناعم ومتساوٍ.' },

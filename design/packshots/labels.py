@@ -52,7 +52,7 @@ out = os.path.join(S, 'tex'); os.makedirs(out, exist_ok=True)
 wordmark(600).save(os.path.join(out, 'wordmark.png'))
 print_band(os.path.join(out, 'wash.png'), 2400, 1200, 'Body wash', '250 ml')
 print_band(os.path.join(out, 'mist.png'), 2400, 1200, 'Body mist', '150 ml')
-print_band(os.path.join(out, 'butter.png'), 2400, 1200, 'Body butter', '200 ml')
+print_band(os.path.join(out, 'scrub.png'), 2400, 1200, 'Body scrub', '200 g')
 print_band(os.path.join(out, 'lotion.png'), 2400, 1200, 'Body lotion', '150 ml')
 # preview on pink
 for n in ['wordmark', 'wash']:
