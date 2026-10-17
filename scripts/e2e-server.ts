@@ -30,6 +30,8 @@ async function main() {
   const env = {
     ...process.env,
     DATABASE_URL: url,
+    // Empty (not unset) so a DIRECT_URL in .env can't point migrations at a hosted database.
+    DIRECT_URL: '',
     STORE_SLUG: 'default',
     SEED_ADMIN_NAME: E2E.owner.name,
     SEED_ADMIN_EMAIL: E2E.owner.email,

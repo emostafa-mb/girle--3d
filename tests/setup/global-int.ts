@@ -16,7 +16,7 @@ declare module 'vitest' {
 export default async function setup(project: TestProject) {
   const dir = mkdtempSync(path.join(tmpdir(), 'shop-int-'));
   const { pg, url } = await startPostgres({ dir, port: PORT, database: 'shop_test', persistent: false });
-  execSync('npx prisma migrate deploy', { env: { ...process.env, DATABASE_URL: url }, stdio: 'inherit' });
+  execSync('npx prisma migrate deploy', { env: { ...process.env, DATABASE_URL: url, DIRECT_URL: '' }, stdio: 'inherit' });
   project.provide('databaseUrl', url);
   return async () => {
     await pg.stop();

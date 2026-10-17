@@ -54,13 +54,18 @@ CI (`.github/workflows/ci.yml`) runs all of the above on every push and pull req
 - `src/i18n/messages` — English and Arabic UI text
 - `prisma/` — schema, migrations, seed
 
-## Deploying to Vercel
+## Deploying to Vercel with Supabase
 
-1. Add a Postgres database to the Vercel project (Storage → Neon, or any hosted Postgres) so
-   `DATABASE_URL` is set for Production and Preview.
-2. Add `SEED_ADMIN_EMAIL` and `SEED_ADMIN_PASSWORD` (and optionally `SEED_ADMIN_NAME`, `STORE_SLUG`)
-   under Settings → Environment Variables.
-3. Deploy. Vercel runs `npm run vercel-build`, which applies migrations, runs the seed (safe to
+1. Create a project at supabase.com (pick the region closest to your customers) and note the
+   database password you choose.
+2. In Supabase, open **Connect** and copy two connection strings, replacing `[YOUR-PASSWORD]`:
+   - **Transaction pooler** (port 6543) → Vercel env var `DATABASE_URL`
+   - **Session pooler** (port 5432) → Vercel env var `DIRECT_URL`
+
+   Don't use the "Direct connection" string: it is IPv6-only and Vercel builds can't reach it.
+3. In Vercel → Settings → Environment Variables, add those two plus `SEED_ADMIN_EMAIL` and
+   `SEED_ADMIN_PASSWORD` (optionally `SEED_ADMIN_NAME`, `STORE_SLUG`), for Production and Preview.
+4. Deploy. Vercel runs `npm run vercel-build`, which applies migrations, runs the seed (safe to
    repeat: it only creates what is missing) and builds the app.
 
 ## Changing the database schema

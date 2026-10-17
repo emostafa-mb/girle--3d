@@ -4,7 +4,9 @@ import { seedFoundation } from '../src/core/setup/seed-foundation';
 import { PrismaClient } from '../src/generated/prisma/client';
 import { seedE2eFixtures } from '../tests/e2e/seed-fixtures';
 
-const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) });
+// Prefer the session/direct connection when a transaction pooler is in front (see prisma.config.ts).
+const connectionString = process.env.DIRECT_URL || process.env.DATABASE_URL;
+const db = new PrismaClient({ adapter: new PrismaPg({ connectionString }) });
 
 async function main() {
   const email = process.env.SEED_ADMIN_EMAIL;
