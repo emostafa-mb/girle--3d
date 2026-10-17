@@ -30,6 +30,7 @@ WASH_GEOMETRY = (640, 100, 430, 150)
 # Stills with blank packaging (design/flow/stills/<slug>.jpg) -> label and the same geometry, in pixels.
 STILLS = {
     'body-lotion': ('lotion.png', (448, 103, 723, 150)),
+    'body-butter': ('butter.png', (447, 215, 782, 200)),
 }
 
 
