@@ -17,14 +17,14 @@ export const PRODUCT_FILM_WINDOWS = [
 ] as const;
 export const PRODUCT_FILM_REVEAL = 0.94;
 
-/** Home film (design/flow compose.py 'brand'): one Flow ingredient moment per product, then the Blender line-up. */
+/** Home film (design/flow compose.py 'brand'): products dropping, one Flow ingredient moment per product, then the Blender line-up. */
 export const BRAND_FILM_WINDOWS = [
-  [0.04, 0.2],
-  [0.21, 0.4],
-  [0.41, 0.6],
-  [0.61, 0.78],
+  [0.2, 0.33],
+  [0.35, 0.5],
+  [0.52, 0.66],
+  [0.68, 0.82],
 ] as const;
-export const BRAND_FILM_REVEAL = 0.9;
+export const BRAND_FILM_REVEAL = 0.91;
 
 /**
  * Films replaced by Google Flow videos (design/flow): their frame count, caption windows and copy.
