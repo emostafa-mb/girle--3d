@@ -19,6 +19,14 @@ FRAMES = 150
 # Each segment covers [start, end] seconds of the finished film. Overlapping segments dissolve.
 # ('video', file, from_s, to_s) plays a Flow clip; ('frames', from_n, to_n) plays Blender frames.
 FILMS = {
+    # Home: one ingredient moment per product, in routine order, then the Blender line-up and G.
+    'brand': [
+        (0.0, 3.6, ('video', 'Fruit_pieces_and_oil_splash_20261017201611.mp4', 2.0, 5.6)),
+        (3.0, 6.6, ('video', 'Coconut_milk_and_oil_swirl_20261017203607.mp4', 1.5, 5.1)),
+        (6.0, 9.6, ('video', 'Ingredients_whipping_into_pink_b…_20261017203443.mp4', 0.8, 4.4)),
+        (9.0, 12.6, ('video', 'Fruits_and_petals_drifting_20261017204030.mp4', 1.5, 5.1)),
+        (12.0, 15.5, ('frames', 84, 120)),
+    ],
     'body-butter': [
         (0.0, 10.0, ('video', 'Ingredients_whipping_into_pink_b…_20261017203443.mp4', 0.0, 10.0)),
         (9.4, 13.9, ('video', 'Body_butter_jar_closing_20261017203452.mp4', 0.0, 4.5)),  # before Flow's own label

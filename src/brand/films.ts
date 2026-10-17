@@ -17,14 +17,14 @@ export const PRODUCT_FILM_WINDOWS = [
 ] as const;
 export const PRODUCT_FILM_REVEAL = 0.94;
 
-/** Home film: the four products drop in at frames 16, 32, 48 and 64; the G rises 88–104. */
+/** Home film (design/flow compose.py 'brand'): one Flow ingredient moment per product, then the Blender line-up. */
 export const BRAND_FILM_WINDOWS = [
-  [0.1, 0.25],
-  [0.25, 0.39],
-  [0.39, 0.52],
-  [0.52, 0.7],
+  [0.04, 0.2],
+  [0.21, 0.4],
+  [0.41, 0.6],
+  [0.61, 0.78],
 ] as const;
-export const BRAND_FILM_REVEAL = 0.86;
+export const BRAND_FILM_REVEAL = 0.9;
 
 /**
  * Films replaced by Google Flow videos (design/flow): their frame count, caption windows and copy.
@@ -179,9 +179,10 @@ FLOW_FILMS['body-mist'] = {
     },
   ],
 };
-const FILM_COUNTS: Record<string, number> = Object.fromEntries(
-  Object.entries(FLOW_FILMS).map(([name, film]) => [name, film.count]),
-);
+const FILM_COUNTS: Record<string, number> = {
+  brand: 150,
+  ...Object.fromEntries(Object.entries(FLOW_FILMS).map(([name, film]) => [name, film.count])),
+};
 
 export function filmFrames(name: string) {
   const count = FILM_COUNTS[name] ?? FILM_FRAMES;
