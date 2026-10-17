@@ -6,6 +6,8 @@ argv = sys.argv[sys.argv.index('--') + 1:]
 S, MODE = argv[0], argv[1]
 ONLY = set(argv[2:])
 FINAL = MODE == 'final'
+# Web models (glb mode) use half the radial detail; smooth shading hides the difference.
+SEG_SCALE = 0.5 if MODE == 'glb' else 1.0
 CM = 0.01
 OUT = os.path.join(S, 'renders' if FINAL else 'preview')
 os.makedirs(OUT, exist_ok=True)
@@ -73,7 +75,7 @@ def lathe(name, prof, mat, segs=128, loc=(0, 0, 0), smooth=True):
     bm = bmesh.new()
     vs = [bm.verts.new((r * CM, 0, z * CM)) for r, z in prof]
     es = [bm.edges.new((vs[i], vs[i + 1])) for i in range(len(vs) - 1)]
-    bmesh.ops.spin(bm, geom=vs + es, cent=(0, 0, 0), axis=(0, 0, 1), angle=2 * math.pi, steps=segs, use_merge=True)
+    bmesh.ops.spin(bm, geom=vs + es, cent=(0, 0, 0), axis=(0, 0, 1), angle=2 * math.pi, steps=int(segs * SEG_SCALE), use_merge=True)
     bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=1e-7)
     bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
     me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
@@ -89,6 +91,7 @@ def shell(name, outer, t, mat, **kw):
     return lathe(name, outer + list(reversed(inner)), mat, **kw)
 
 def band(name, radius, z0, z1, arc_deg, img_path, segs=96):
+    segs = int(segs * SEG_SCALE)
     """Partial cylinder facing -Y carrying a transparent print texture."""
     bm = bmesh.new()
     uv = bm.loops.layers.uv.new()
@@ -184,7 +187,7 @@ def body_butter():
         if v.co.z / CM > 4.15 and r < 3.1:
             th = math.atan2(v.co.y, v.co.x)
             v.co.z += CM * 0.22 * math.sin(3 * th + r * 2.4) * (r / 3.1) ** 0.6 * (1 - r / 3.2)
-    sub = cream.modifiers.new('sub', 'SUBSURF'); sub.levels = sub.render_levels = 1
+    sub = cream.modifiers.new('sub', 'SUBSURF'); sub.levels = sub.render_levels = 0 if MODE == 'glb' else 1
     lid_prof = fillet([(3.3, 5.05, 0), (3.62, 5.05, 0.08), (3.62, 6.35, 0.18), (0, 6.42, 0)])
     lid = lathe('butter_lid', lid_prof, WHITE_PP, segs=480)
     for v in lid.data.vertices:
@@ -343,6 +346,59 @@ def render(name):
     r.filepath = path
     bpy.ops.render.render(write_still=True)
     print('wrote', path)
+
+def export_web_models():
+    """GLB per product for the storefront's 3D viewer. Real-time engines can't show a refractive
+    liquid inside a refractive bottle, so plastics become glossy alpha-blended shells and
+    liquids become solid colour."""
+    def web(mat, base=None, alpha=1.0, rough=None):
+        bsdf = next(n for n in mat.node_tree.nodes if n.type == 'BSDF_PRINCIPLED')
+        bsdf.inputs['Transmission Weight'].default_value = 0.0
+        bsdf.inputs['Subsurface Weight'].default_value = 0.0
+        bsdf.inputs['Emission Strength'].default_value = 0.0
+        if base:
+            bsdf.inputs['Base Color'].default_value = srgb(base)
+        if rough is not None:
+            bsdf.inputs['Roughness'].default_value = rough
+        bsdf.inputs['Alpha'].default_value = alpha
+        if alpha < 1:
+            mat.surface_render_method = 'BLENDED'
+    web(PET, '#ffffff', alpha=0.16, rough=0.04)
+    web(OVERCAP, '#ffffff', alpha=0.14, rough=0.04)
+    web(TUBE, '#ffffff', alpha=0.5, rough=0.2)
+    web(GEL, '#ff8db0', rough=0.12)
+    web(MIST, '#ffc4d5', rough=0.08)
+    web(BUTTER, '#ffc2d3', rough=0.55)
+    web(WHITE_PP); web(HDPE)
+    radius = {'wash': 2.75, 'mist': 2.2, 'butter': 3.5, 'lotion': 2.2}
+    for m in bpy.data.materials:
+        if not m.name.endswith('_ink'):
+            continue
+        nt = m.node_tree
+        tex = next(n for n in nt.nodes if n.type == 'TEX_IMAGE')
+        bsdf = next(n for n in nt.nodes if n.type == 'BSDF_PRINCIPLED')
+        nt.links.new(tex.outputs['Color'], bsdf.inputs['Base Color'])  # glTF reads alpha from the base colour texture
+        tex.image.scale(2048, 1024)
+        m.surface_render_method = 'BLENDED'
+    out = os.path.join(S, 'models'); os.makedirs(out, exist_ok=True)
+    for k, (root, _, _) in products.items():
+        root.location = (0, 0, 0); root.rotation_euler.z = 0
+        for o in root.children:
+            if o.name.endswith('_print'):  # lift the print clear of the surface to avoid depth fighting
+                f = 1 + 0.03 / radius[k]; o.scale = (f, f, 1)
+        bpy.ops.object.select_all(action='DESELECT')
+        for o in [root] + list(root.children):
+            o.hide_set(False); o.select_set(True)
+        bpy.context.view_layer.objects.active = root
+        path = os.path.join(out, f'{k}.glb')
+        bpy.ops.export_scene.gltf(filepath=path, export_format='GLB', use_selection=True, export_apply=True,
+                                  export_yup=True, export_cameras=False, export_lights=False)
+        print('wrote', path, os.path.getsize(path) // 1024, 'KB')
+
+if MODE == 'glb':
+    export_web_models()
+    print('ALL DONE')
+    sys.exit(0)
 
 shots = []
 for k, (root, w, h) in products.items():

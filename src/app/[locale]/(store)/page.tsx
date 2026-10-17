@@ -9,7 +9,12 @@ import { Link } from '@/i18n/navigation';
 import { getStoreSettings } from '@/server/store';
 
 export default async function HomePage() {
-  const [locale, t, settings] = await Promise.all([getLocale(), getTranslations('home'), getStoreSettings()]);
+  const [locale, t, tp, settings] = await Promise.all([
+    getLocale(),
+    getTranslations('home'),
+    getTranslations('product'),
+    getStoreSettings(),
+  ]);
   const rtl = isRtl(locale);
   return (
     <>
@@ -65,6 +70,7 @@ export default async function HomePage() {
               locale={locale}
               currency={settings.currency}
               sizes="(min-width: 1024px) 25vw, 50vw"
+              badge3d={tp('viewer.badge')}
             />
           ))}
         </div>

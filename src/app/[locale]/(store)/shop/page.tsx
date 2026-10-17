@@ -11,7 +11,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 }
 
 export default async function ShopPage() {
-  const [locale, t, settings] = await Promise.all([getLocale(), getTranslations('shop'), getStoreSettings()]);
+  const [locale, t, tp, settings] = await Promise.all([
+    getLocale(),
+    getTranslations('shop'),
+    getTranslations('product'),
+    getStoreSettings(),
+  ]);
   return (
     <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:py-20">
       <h1 className="font-display text-5xl sm:text-6xl">{t('title')}</h1>
@@ -24,6 +29,7 @@ export default async function ShopPage() {
             locale={locale}
             currency={settings.currency}
             sizes="(min-width: 1024px) 25vw, 50vw"
+            badge3d={tp('viewer.badge')}
           />
         ))}
       </div>

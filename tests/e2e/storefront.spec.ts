@@ -25,6 +25,7 @@ test('shop lists the line and opens a product page', async ({ page }) => {
   await expect(page).toHaveURL(/\/en\/products\/body-butter$/);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Body butter');
   await expect(page.getByTestId('product-price')).toHaveText('EGP 420');
+  await expect(page.getByTestId('product-3d').locator('model-viewer')).toHaveAttribute('src', '/models/body-butter.glb');
   await expect(page.getByRole('button', { name: 'Add to bag' })).toBeDisabled();
 });
 
