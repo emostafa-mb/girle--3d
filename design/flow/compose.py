@@ -4,9 +4,8 @@ Flow is good at ingredients and texture but invents its own packaging and logo, 
 over to the Blender render (the real bottle, print and G) before Flow's branding shows.
 
 Run from the repo root:  python design/flow/compose.py <film> <downloads folder> <frames folder>
-<frames folder> holds the WebP frames the ('frames', ...) segment plays: an ending from ending.py, or
-for body wash the previous film's ending (copied out of public/films/<film> first, because the output
-replaces them).
+<frames folder> holds the WebP frames the ('frames', ...) segment plays: the film's ending from
+compose_ending.py.
 """
 import pathlib
 import sys
@@ -20,7 +19,8 @@ FRAMES = 150
 # Each segment covers [start, end] seconds of the finished film. Overlapping segments dissolve.
 # ('video', file, from_s, to_s) plays a Flow clip; ('frames', from_n, to_n) plays Blender frames.
 FILMS = {
-    # Home: one ingredient moment per product, in routine order, then the Blender line-up and G.
+    # Home: products dropping, one moment per product in routine order, then the four products landing.
+    # Every ('frames', ...) ending is from compose_ending.py: a Flow clip with the real prints wrapped on.
     'brand': [
         # opening: products and drops falling (cut before that clip's own G appears)
         (0.0, 3.6, ('video', 'Cosmetics_products_drop_on_floor_20261017205059.mp4', 0.0, 3.6)),
@@ -29,31 +29,28 @@ FILMS = {
         (6.0, 9.6, ('video', 'Marshmallows_and_sugar_forming_s…_20261017221126.mp4', 2.0, 5.6)),
         (9.0, 12.6, ('video', 'Blueberries_and_lotion_swirling_20261017221342.mp4', 0.5, 4.1)),
         (12.0, 15.6, ('video', 'Marshmallows_splash_into_pink_li…_20261017221433.mp4', 1.0, 4.6)),
-        (15.0, 19.0, ('frames', 1, 60)),  # ending.py brand: the four products, both flavours
+        (15.0, 21.0, ('frames', 1, 72)),
     ],
     # Flavours: the Blueberry clip, then the Marshmallow clip, then the packaging.
     'body-wash': [
         (0.0, 7.6, ('video', 'Blueberries_and_gel_ribbon_swirling_20261017220747.mp4', 0.0, 7.6)),
         (7.0, 14.6, ('video', 'Gel_ribbon_and_marshmallows_boun…_20261017220830.mp4', 0.2, 7.8)),
-        # the previous film's ending: Flow's bottle with the print wrapped on (compose_wash.py)
-        (14.0, 16.8, ('frames', 132, 150)),
+        (14.0, 20.0, ('frames', 1, 72)),
     ],
     'body-scrub': [
         (0.0, 7.6, ('video', 'Blueberries_and_sugar_tumbling_20261017220926.mp4', 0.0, 7.6)),
         (7.0, 14.6, ('video', 'Marshmallows_and_sugar_forming_s…_20261017221126.mp4', 0.2, 7.8)),
-        (14.0, 18.0, ('video', 'Body_butter_jar_closing_20261017203452.mp4', 0.5, 4.5)),  # before Flow's own label
-        (17.4, 21.4, ('frames', 1, 60)),  # ending.py: the Blueberry jar, then Marshmallow
+        (14.0, 19.5, ('frames', 1, 72)),
     ],
     'body-splash': [
         (0.0, 5.5, ('video', 'Blueberries_dropping_into_liquid_20261017221417.mp4', 0.3, 5.8)),
         (4.9, 10.4, ('video', 'Marshmallows_splash_into_pink_li…_20261017221433.mp4', 1.0, 6.5)),
-        (9.8, 13.6, ('video', 'Filling_bottle_with_pink_liquid_20261017204022.mp4', 2.5, 6.3)),  # before Flow's label
-        (13.0, 17.0, ('frames', 1, 60)),  # ending.py: the Blueberry bottle, then Marshmallow
+        (9.8, 15.8, ('frames', 1, 72)),
     ],
     'body-lotion': [
         (0.0, 7.6, ('video', 'Blueberries_and_lotion_swirling_20261017221342.mp4', 0.0, 7.6)),
         (7.0, 14.6, ('video', 'Creamy_lotion_swirls_and_marshma…_20261017221351.mp4', 0.2, 7.8)),
-        (14.0, 18.0, ('frames', 1, 60)),  # ending.py: the Blueberry bottle, then Marshmallow
+        (14.0, 20.0, ('frames', 1, 72)),
     ],
 }
 

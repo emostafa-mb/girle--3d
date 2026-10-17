@@ -65,11 +65,17 @@ Rules that make scroll films work:
 
 ## Turning videos into films
 
-- `python design/flow/video_to_frames.py <video> <film>`: one clip as-is.
-- `python design/flow/compose_wash.py ...`: body wash, two clips plus the GIRLÉ print added onto Flow's bottle.
-- `python design/flow/compose.py <film> <downloads> <blender frames>`: Flow clips that hand over to the
-  Blender ending (real bottle, print and G) before Flow's own packaging or logo shows. Body butter and
-  body lotion are built this way; the segments are listed at the top of the script.
+Every film is the flavour clips (Blueberry, then Marshmallow) followed by an ending clip: the two
+flavours side by side with blank packaging, the camera still for the last seconds (prompts in
+FLAVORS.md and the chat that made them). The real prints are added in code, so the logo is always right.
+
+1. `python design/packshots/labels.py <scratch>` prints the label artwork (with flavour names) into `<scratch>/tex`.
+2. `python design/flow/compose_ending.py <product|brand> <downloads> <scratch>/tex <ending folder>` wraps the
+   prints onto the bottles once they settle. Bottle positions are measured on the clip's last frame and
+   listed at the top of the script; the bottles are tracked, so a slow camera move is fine.
+3. `python design/flow/compose.py <film> <downloads> <ending folder>` joins the clips and the ending into
+   `public/films/<film>`; the segments are listed at the top of the script.
+4. `python design/flow/photos.py <downloads> <scratch>/tex` makes the product photos from the blank stills.
 
 Then set the film's caption windows in `src/brand/films.ts` (`FLOW_FILMS`).
 
