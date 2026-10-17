@@ -63,6 +63,16 @@ Rules that make scroll films work:
 > glides along the row, then pulls back to show all four in a line slightly right of centre, as a
 > large glossy black script letter G rises behind them.
 
+## Turning videos into films
+
+- `python design/flow/video_to_frames.py <video> <film>`: one clip as-is.
+- `python design/flow/compose_wash.py ...`: body wash, two clips plus the GIRLÉ print added onto Flow's bottle.
+- `python design/flow/compose.py <film> <downloads> <blender frames>`: Flow clips that hand over to the
+  Blender ending (real bottle, print and G) before Flow's own packaging or logo shows. Body butter and
+  body lotion are built this way; the segments are listed at the top of the script.
+
+Then set the film's caption windows in `src/brand/films.ts` (`FLOW_FILMS`).
+
 ## Version 2: the blend (ingredients mixing before the product)
 
 Each film is two 8-second clips joined in Flow's scene builder: clip 1 shows the blend being made
