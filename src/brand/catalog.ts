@@ -13,7 +13,8 @@ export type StarterProduct = {
   howTo: Localized;
   size: Localized;
   price: number;
-  images: { front: string; angle: string };
+  /** front: the packshot; detail: the ingredients shot from the product's Flow film. */
+  images: { front: string; detail: string };
   /** Position in the daily routine, starting at 1. */
   step: number;
   stepNote: Localized;
@@ -34,7 +35,7 @@ export const starterProducts: readonly StarterProduct[] = [
     },
     size: { en: '250 ml', ar: '٢٥٠ مل' },
     price: 32000,
-    images: { front: '/products/body-wash-front.jpg', angle: '/products/body-wash-angle.jpg' },
+    images: { front: '/products/body-wash-packshot.jpg', detail: '/products/body-wash-detail.jpg' },
     step: 1,
     stepNote: { en: 'In the shower', ar: 'أثناء الاستحمام' },
   },
@@ -52,7 +53,7 @@ export const starterProducts: readonly StarterProduct[] = [
     },
     size: { en: '150 ml', ar: '١٥٠ مل' },
     price: 35000,
-    images: { front: '/products/body-lotion-front.jpg', angle: '/products/body-lotion-angle.jpg' },
+    images: { front: '/products/body-lotion-front.jpg', detail: '/products/body-lotion-detail.jpg' },
     step: 2,
     stepNote: { en: 'Right after, on damp skin', ar: 'بعده مباشرة على بشرة رطبة' },
   },
@@ -70,7 +71,7 @@ export const starterProducts: readonly StarterProduct[] = [
     },
     size: { en: '200 ml', ar: '٢٠٠ مل' },
     price: 42000,
-    images: { front: '/products/body-butter-front.jpg', angle: '/products/body-butter-angle.jpg' },
+    images: { front: '/products/body-butter-front.jpg', detail: '/products/body-butter-detail.jpg' },
     step: 3,
     stepNote: { en: 'On dry spots, best at night', ar: 'على المناطق الجافة، والأفضل ليلاً' },
   },
@@ -88,7 +89,7 @@ export const starterProducts: readonly StarterProduct[] = [
     },
     size: { en: '150 ml', ar: '١٥٠ مل' },
     price: 38000,
-    images: { front: '/products/body-mist-front.jpg', angle: '/products/body-mist-angle.jpg' },
+    images: { front: '/products/body-mist-front.jpg', detail: '/products/body-mist-detail.jpg' },
     step: 4,
     stepNote: { en: 'Last, and whenever you like', ar: 'في النهاية، ومتى شئتِ' },
   },

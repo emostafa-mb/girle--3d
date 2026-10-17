@@ -41,7 +41,7 @@ export default async function ProductPage({ params }: Props) {
     '@type': 'Product',
     name: `${localize(settings.storeName, locale)} ${name}`,
     description: localize(product.description, locale),
-    image: [product.images.front, product.images.angle],
+    image: [product.images.front, product.images.detail],
     brand: { '@type': 'Brand', name: localize(settings.storeName, 'en') },
     offers: {
       '@type': 'Offer',
@@ -87,7 +87,7 @@ export default async function ProductPage({ params }: Props) {
       </Link>
       <div className="mt-6 grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:gap-16">
         <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 sm:mx-0 sm:px-0 lg:flex-col lg:overflow-visible">
-          {[product.images.front, product.images.angle].map((src, i) => (
+          {[product.images.front, product.images.detail].map((src, i) => (
             <div
               key={src}
               className="relative aspect-[4/5] w-[85%] shrink-0 snap-center overflow-hidden rounded-[2rem] bg-studio sm:w-[70%] lg:w-full"
