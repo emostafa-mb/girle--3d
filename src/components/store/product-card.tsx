@@ -13,7 +13,7 @@ export function ProductCard({ product, locale, currency, sizes }: Props) {
       <div className="relative aspect-[4/5] overflow-hidden rounded-[1.75rem] bg-studio">
         <Image src={product.images.front} alt={name} fill sizes={sizes} className="object-cover" />
         <Image
-          src={product.images.angle}
+          src={product.images.detail}
           alt=""
           fill
           sizes={sizes}

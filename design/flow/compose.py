@@ -24,6 +24,11 @@ FILMS = {
         (9.4, 13.9, ('video', 'Body_butter_jar_closing_20261017203452.mp4', 0.0, 4.5)),  # before Flow's own label
         (13.3, 16.9, ('frames', 92, 120)),  # the lid settles, the print wraps, the G rises
     ],
+    'body-mist': [
+        (0.0, 10.0, ('video', 'Fruits_and_petals_drifting_20261017204030.mp4', 0.0, 10.0)),
+        (9.4, 15.7, ('video', 'Filling_bottle_with_pink_liquid_20261017204022.mp4', 0.0, 6.3)),  # before Flow's label
+        (15.1, 18.0, ('frames', 96, 120)),  # the print wraps, the G rises
+    ],
     'body-lotion': [
         (0.0, 10.0, ('video', 'Coconut_milk_and_oil_swirl_20261017203607.mp4', 0.0, 10.0)),
         (9.2, 14.4, ('frames', 50, 120)),  # the lotion pours into the real bottle, cap, print, G

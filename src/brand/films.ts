@@ -143,6 +143,42 @@ FLOW_FILMS['body-lotion'] = {
     },
   ],
 };
+FLOW_FILMS['body-mist'] = {
+  count: 150,
+  reveal: 0.95,
+  stages: [
+    {
+      from: 0.03,
+      to: 0.27,
+      title: { en: 'The notes', ar: 'النفحات' },
+      body: { en: 'Inspired by peony, rose, lychee and pear.', ar: 'مستوحى من البيوني والورد والليتشي والكمثرى.' },
+    },
+    {
+      from: 0.29,
+      to: 0.52,
+      title: { en: 'The essence', ar: 'الخلاصة' },
+      body: { en: 'Gathered into a light, clear pink mist.', ar: 'تجتمع في رذاذ وردي خفيف وشفاف.' },
+    },
+    {
+      from: 0.55,
+      to: 0.82,
+      title: { en: 'The bottle', ar: 'العبوة' },
+      body: {
+        en: 'A fine-mist pump under a clear cap, ready for your bag.',
+        ar: 'بخاخ رذاذ ناعم تحت غطاء شفاف، جاهز لحقيبتك.',
+      },
+    },
+    {
+      from: 0.85,
+      to: 0.94,
+      title: { en: 'The finish', ar: 'اللمسة الأخيرة' },
+      body: {
+        en: 'Printed with the GIRLÉ G. The last step, and any time after.',
+        ar: 'مطبوع عليه شعار GIRLÉ. الخطوة الأخيرة، ومتى شئتِ بعدها.',
+      },
+    },
+  ],
+};
 const FILM_COUNTS: Record<string, number> = Object.fromEntries(
   Object.entries(FLOW_FILMS).map(([name, film]) => [name, film.count]),
 );
