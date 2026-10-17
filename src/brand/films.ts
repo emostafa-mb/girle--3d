@@ -17,14 +17,14 @@ export const PRODUCT_FILM_WINDOWS = [
 ] as const;
 export const PRODUCT_FILM_REVEAL = 0.94;
 
-/** Home film (design/flow compose.py 'brand'): products dropping, one Flow moment per product, then the four packshots. */
+/** Home film (design/flow compose.py 'brand'): products dropping, one Flow moment per product, then the four products landing, printed. */
 export const BRAND_FILM_WINDOWS = [
-  [0.2, 0.33],
-  [0.35, 0.5],
-  [0.52, 0.66],
-  [0.68, 0.82],
+  [0.16, 0.28],
+  [0.31, 0.43],
+  [0.46, 0.57],
+  [0.6, 0.72],
 ] as const;
-export const BRAND_FILM_REVEAL = 0.91;
+export const BRAND_FILM_REVEAL = 0.92;
 
 /**
  * Films replaced by Google Flow videos (design/flow): their frame count, caption windows and copy.
@@ -50,35 +50,34 @@ function flavorFilm(
   };
 }
 
-const FINISH: Localized = { en: 'The finish', ar: 'اللمسة الأخيرة' };
-/** Endings from design/flow/ending.py: the Blueberry packshot, wiping to Marshmallow. */
+/** Endings from design/flow/compose_ending.py: both flavours side by side, the real prints wrapping on. */
 const BOTH: Localized = { en: 'Two flavours', ar: 'نكهتان' };
 
 FLOW_FILMS['body-wash'] = flavorFilm(
-  0.96,
+  0.94,
   [
     0.03,
-    0.42,
+    0.36,
     {
       en: 'A deep pink gel with juicy blueberry that foams into rich bubbles.',
       ar: 'جل وردي داكن بالتوت الأزرق يتحول إلى رغوة غنية.',
     },
   ],
   [
-    0.46,
-    0.82,
+    0.4,
+    0.7,
     {
       en: 'A soft blush gel, sweet as marshmallow, with a gentle foam.',
       ar: 'جل وردي فاتح بحلاوة المارشميلو ورغوة لطيفة.',
     },
   ],
   [
-    0.86,
-    0.95,
-    FINISH,
+    0.74,
+    0.92,
+    BOTH,
     {
-      en: 'A clear bottle with a flip cap. Start every shower here.',
-      ar: 'عبوة شفافة بغطاء قلّاب. ابدئي بها كل استحمام.',
+      en: 'Blueberry or Marshmallow, in a clear bottle with a flip cap. Start every shower here.',
+      ar: 'التوت الأزرق أو المارشميلو، في عبوة شفافة بغطاء قلّاب. ابدئي بها كل استحمام.',
     },
   ],
 );
@@ -86,48 +85,48 @@ FLOW_FILMS['body-scrub'] = flavorFilm(
   0.95,
   [
     0.03,
-    0.33,
+    0.37,
     {
       en: 'Blueberry and sugar crystals in a glittering deep pink scrub.',
       ar: 'التوت الأزرق مع بلورات السكر في مقشّر وردي داكن لامع.',
     },
   ],
   [
-    0.37,
-    0.65,
+    0.4,
+    0.71,
     { en: 'Marshmallow and fine sugar in a soft blush scrub.', ar: 'المارشميلو مع السكر الناعم في مقشّر وردي فاتح.' },
   ],
   [
-    0.69,
-    0.8,
+    0.75,
+    0.84,
     { en: 'The jar', ar: 'البرطمان' },
     { en: 'A wide jar with a screw lid that closes tight.', ar: 'برطمان واسع بغطاء محكم الإغلاق.' },
   ],
   [
-    0.84,
-    0.93,
+    0.87,
+    0.94,
     BOTH,
     {
-      en: 'Blueberry or Marshmallow, in a wide jar. Two or three times a week, after washing.',
-      ar: 'التوت الأزرق أو المارشميلو، في برطمان واسع. مرتين أو ثلاث مرات أسبوعياً بعد الغسول.',
+      en: 'Blueberry or Marshmallow. Two or three times a week, after washing.',
+      ar: 'التوت الأزرق أو المارشميلو. مرتين أو ثلاث مرات أسبوعياً بعد الغسول.',
     },
   ],
 );
 FLOW_FILMS['body-lotion'] = flavorFilm(
-  0.95,
+  0.94,
   [
     0.03,
-    0.4,
+    0.36,
     { en: 'A creamy deep pink lotion with a blueberry scent.', ar: 'لوشن كريمي وردي داكن برائحة التوت الأزرق.' },
   ],
   [
-    0.44,
-    0.77,
+    0.4,
+    0.7,
     { en: 'A silky blush lotion, soft and sweet as marshmallow.', ar: 'لوشن حريري وردي فاتح، ناعم وحلو كالمارشميلو.' },
   ],
   [
-    0.81,
-    0.93,
+    0.74,
+    0.92,
     BOTH,
     {
       en: 'Blueberry or Marshmallow, in a soft white bottle. Right after the shower, on damp skin.',
@@ -136,22 +135,22 @@ FLOW_FILMS['body-lotion'] = flavorFilm(
   ],
 );
 FLOW_FILMS['body-splash'] = flavorFilm(
-  0.95,
-  [0.03, 0.29, { en: 'A juicy blueberry splash in a clear deep pink.', ar: 'سبلاش التوت الأزرق بلون وردي داكن شفاف.' }],
-  [0.33, 0.58, { en: 'A sweet marshmallow splash in a clear blush pink.', ar: 'سبلاش المارشميلو بلون وردي فاتح شفاف.' }],
+  0.96,
+  [0.03, 0.33, { en: 'A juicy blueberry splash in a clear deep pink.', ar: 'سبلاش التوت الأزرق بلون وردي داكن شفاف.' }],
+  [0.36, 0.61, { en: 'A sweet marshmallow splash in a clear blush pink.', ar: 'سبلاش المارشميلو بلون وردي فاتح شفاف.' }],
   [
-    0.62,
-    0.76,
+    0.65,
+    0.84,
     { en: 'The bottle', ar: 'العبوة' },
     { en: 'A spray pump under a clear cap, ready for your bag.', ar: 'بخاخ تحت غطاء شفاف، جاهز لحقيبتك.' },
   ],
   [
-    0.8,
-    0.93,
+    0.87,
+    0.95,
     BOTH,
     {
-      en: 'Blueberry or Marshmallow, with a fine spray. Spray it on last, and any time after.',
-      ar: 'التوت الأزرق أو المارشميلو، برذاذ ناعم. رشّيه في النهاية ومتى شئتِ.',
+      en: 'Blueberry or Marshmallow. Spray it on last, and any time after.',
+      ar: 'التوت الأزرق أو المارشميلو. رشّيه في النهاية ومتى شئتِ.',
     },
   ],
 );

@@ -54,7 +54,7 @@ export default async function HomePage() {
         }}
         labels={{ steps: tf('brandSteps') }}
         portraitZoom={1.5}
-        portraitFocusEnd={0.68}
+        portraitFocusEnd={0.62}
         textSide="left"
       />
 
