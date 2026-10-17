@@ -68,6 +68,81 @@ const FLOW_FILMS: Record<string, { count: number; reveal: number; stages: FilmSt
     ],
   },
 };
+FLOW_FILMS['body-butter'] = {
+  count: 150,
+  reveal: 0.95,
+  stages: [
+    {
+      from: 0.03,
+      to: 0.3,
+      title: { en: 'The butters', ar: 'الزبدة' },
+      body: {
+        en: 'Inspired by shea and cocoa butter, rose petals and rosehip oil.',
+        ar: 'مستوحاة من زبدة الشيا والكاكاو وبتلات الورد وزيت ثمر الورد.',
+      },
+    },
+    {
+      from: 0.32,
+      to: 0.58,
+      title: { en: 'The whip', ar: 'الخفق' },
+      body: { en: 'Melted, then whipped into a soft pink butter.', ar: 'تُذاب ثم تُخفق لتصبح زبدة وردية ناعمة.' },
+    },
+    {
+      from: 0.6,
+      to: 0.8,
+      title: { en: 'The jar', ar: 'البرطمان' },
+      body: { en: 'Piped into a wide jar and closed with a screw lid.', ar: 'تُملأ في برطمان واسع وتُغلق بغطاء محكم.' },
+    },
+    {
+      from: 0.83,
+      to: 0.94,
+      title: { en: 'The finish', ar: 'اللمسة الأخيرة' },
+      body: {
+        en: 'Printed with the GIRLÉ G. For the spots that dry out first.',
+        ar: 'مطبوع عليه شعار GIRLÉ. للمناطق التي تجف أولاً.',
+      },
+    },
+  ],
+};
+FLOW_FILMS['body-lotion'] = {
+  count: 150,
+  reveal: 0.96,
+  stages: [
+    {
+      from: 0.03,
+      to: 0.25,
+      title: { en: 'The ingredients', ar: 'المكونات' },
+      body: {
+        en: 'Inspired by coconut, sweet almond, vanilla and shea.',
+        ar: 'مستوحى من جوز الهند واللوز الحلو والفانيليا والشيا.',
+      },
+    },
+    {
+      from: 0.27,
+      to: 0.62,
+      title: { en: 'The blend', ar: 'الخلطة' },
+      body: {
+        en: 'Coconut milk and almond oil, swirled into a silky lotion.',
+        ar: 'حليب جوز الهند وزيت اللوز يمتزجان في لوشن حريري.',
+      },
+    },
+    {
+      from: 0.66,
+      to: 0.86,
+      title: { en: 'The bottle', ar: 'العبوة' },
+      body: { en: 'Poured into a soft white bottle with a flip cap.', ar: 'يُسكب في عبوة بيضاء ناعمة بغطاء قلّاب.' },
+    },
+    {
+      from: 0.88,
+      to: 0.95,
+      title: { en: 'The finish', ar: 'اللمسة الأخيرة' },
+      body: {
+        en: 'Printed with the GIRLÉ G. Right after the shower, on damp skin.',
+        ar: 'مطبوع عليه شعار GIRLÉ. بعد الاستحمام مباشرة على بشرة رطبة.',
+      },
+    },
+  ],
+};
 const FILM_COUNTS: Record<string, number> = Object.fromEntries(
   Object.entries(FLOW_FILMS).map(([name, film]) => [name, film.count]),
 );
