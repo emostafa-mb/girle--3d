@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { findFlavor, findStarterProduct, flavors, starterProducts } from '@/brand/catalog';
-import { filmFrames, productFilmReveal, productFilmStages } from '@/brand/films';
+import { filmFrames, productFilmEnding, productFilmReveal, productFilmStages } from '@/brand/films';
 import { SplitHeading } from '@/components/motion/split-heading';
 import { ScrollFilm } from '@/components/store/scroll-film';
 import { Button } from '@/components/ui/button';
@@ -87,6 +87,8 @@ export default async function ProductPage({ params, searchParams }: Props) {
           ),
         }}
         labels={{ steps: tf('steps', { name }) }}
+        portraitZoomEnd={1.55}
+        portraitEndAt={productFilmEnding(product.slug)}
       />
     <div id="details" className="mx-auto max-w-7xl scroll-mt-16 px-4 py-12 sm:px-6 lg:py-20" data-testid="product-details">
       <Link href="/shop" className="text-sm text-muted-foreground hover:text-foreground hover:underline">

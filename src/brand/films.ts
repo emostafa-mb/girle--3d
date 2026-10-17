@@ -25,6 +25,8 @@ export const BRAND_FILM_WINDOWS = [
   [0.6, 0.72],
 ] as const;
 export const BRAND_FILM_REVEAL = 0.92;
+/** Where the home film's ending (the four products landing) starts. */
+export const BRAND_FILM_ENDING = 0.71;
 
 /**
  * Films replaced by Google Flow videos (design/flow): their frame count, caption windows and copy.
@@ -217,6 +219,13 @@ export function productFilmStages(slug: string): FilmStage[] {
   if (FLOW_FILMS[slug]) return FLOW_FILMS[slug].stages;
   const copy = STAGE_COPY[slug] ?? [];
   return PRODUCT_FILM_WINDOWS.map(([from, to], i) => ({ from, to, title: STAGE_TITLES[i], body: copy[i] ?? {} }));
+}
+
+/** Where each product film's ending (both flavours side by side) starts, from design/flow/compose.py. */
+const ENDING_AT: Record<string, number> = { 'body-wash': 0.7, 'body-scrub': 0.72, 'body-lotion': 0.7, 'body-splash': 0.62 };
+
+export function productFilmEnding(slug: string): number {
+  return ENDING_AT[slug] ?? 0.7;
 }
 
 export function productFilmReveal(slug: string): number {

@@ -18,6 +18,10 @@ type Props = {
   portraitZoom?: number;
   /** Where (0–1 across the frame) the portrait view is centred by the end of the film; 0.5 is the middle. */
   portraitFocusEnd?: number;
+  /** On portrait screens, the zoom by the end of the film, so a wide ending (bottles side by side) fits. */
+  portraitZoomEnd?: number;
+  /** Where (0–1 of the film) the ending starts; the portrait view eases to its end framing just after. */
+  portraitEndAt?: number;
   /**
    * From lg up the words float beside the film: at the reading start ('start'), or always on the left
    * ('left') when the frame keeps its empty space there whatever the language.
@@ -43,6 +47,8 @@ export function ScrollFilm({
   labels,
   portraitZoom = 2.2,
   portraitFocusEnd = 0.5,
+  portraitZoomEnd,
+  portraitEndAt = 0.7,
   textSide = 'start',
   className,
 }: Props) {
@@ -114,9 +120,11 @@ export function ScrollFilm({
       ctx.fillStyle = studio;
       ctx.fillRect(0, 0, cw, ch);
       ctx.imageSmoothingQuality = 'high';
-      const s = Math.min(cover, (cw * portraitZoom) / iw);
+      const end = ramp(portraitEndAt, portraitEndAt + 0.08, smooth);
+      const zoom = portraitZoom + ((portraitZoomEnd ?? portraitZoom) - portraitZoom) * end;
+      const s = Math.min(cover, (cw * zoom) / iw);
       const w = iw * s, h = ih * s, y = ch * 0.5 - h / 2;
-      const focus = 0.5 + (portraitFocusEnd - 0.5) * ramp(0.7, 0.95, smooth);
+      const focus = 0.5 + (portraitFocusEnd - 0.5) * end;
       const x = Math.min(0, Math.max(cw - w, cw / 2 - focus * w));
       ctx.drawImage(im, x, y, w, h);
       if (h < ch) {
@@ -172,7 +180,7 @@ export function ScrollFilm({
       cancelAnimationFrame(raf);
       running = false;
     };
-  }, [basePath, count, portraitZoom, portraitFocusEnd]);
+  }, [basePath, count, portraitZoom, portraitFocusEnd, portraitZoomEnd, portraitEndAt]);
 
   const introOpacity = 1 - ramp(0.03, 0.07, p);
   const revealOn = p >= reveal.at;
