@@ -1,0 +1,114 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum SessionRealm {
+  ADMIN
+  CUSTOMER
+}
+
+model Store {
+  id        String     @id @default(cuid())
+  slug      String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  settings  Settings?
+  roles     Role[]
+  admins    Admin[]
+  customers Customer[]
+}
+
+model Settings {
+  id        String   @id @default(cuid())
+  storeId   String   @unique
+  store     Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  data      Json     @default("{}")
+  updatedAt DateTime @updatedAt
+}
+
+model Role {
+  id          String   @id @default(cuid())
+  storeId     String
+  store       Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  name        String
+  permissions String[]
+  isSystem    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  admins      Admin[]
+
+  @@unique([storeId, name])
+}
+
+model Admin {
+  id           String    @id @default(cuid())
+  storeId      String
+  store        Store     @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  name         String
+  email        String
+  passwordHash String
+  roleId       String
+  role         Role      @relation(fields: [roleId], references: [id])
+  isActive     Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@unique([storeId, email])
+}
+
+model Customer {
+  id           String    @id @default(cuid())
+  storeId      String
+  store        Store     @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  name         String
+  email        String
+  phone        String?
+  passwordHash String
+  deletedAt    DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@unique([storeId, email])
+}
+
+model Session {
+  id        String       @id @default(cuid())
+  storeId   String
+  realm     SessionRealm
+  subjectId String
+  tokenHash String       @unique
+  expiresAt DateTime
+  createdAt DateTime     @default(now())
+
+  @@index([realm, subjectId])
+}
+
+model LoginAttempt {
+  id        String       @id @default(cuid())
+  storeId   String
+  realm     SessionRealm
+  email     String
+  success   Boolean
+  createdAt DateTime     @default(now())
+
+  @@index([storeId, realm, email, createdAt])
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  storeId    String
+  adminId    String?
+  action     String
+  entityType String
+  entityId   String?
+  diff       Json?
+  createdAt  DateTime @default(now())
+
+  @@index([storeId, createdAt])
+}

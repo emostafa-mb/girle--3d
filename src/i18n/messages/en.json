@@ -1,0 +1,91 @@
+{
+  "common": {
+    "switchTo": "العربية",
+    "theme": {
+      "toggle": "Toggle dark mode"
+    }
+  },
+  "meta": {
+    "description": "GIRLÉ body care: body wash, body lotion, body butter and body mist, made to layer."
+  },
+  "nav": {
+    "home": "Home",
+    "signIn": "Sign in",
+    "account": "My account",
+    "signOut": "Sign out",
+    "shop": "Shop",
+    "routine": "The routine",
+    "main": "Main"
+  },
+  "home": {
+    "heroTitle": "Your new body routine is pink.",
+    "heroSubtitle": "Wash, lotion, butter and mist: the first four from GIRLÉ, made to layer from shower to street.",
+    "shopCta": "Shop the four",
+    "routineCta": "See the routine",
+    "lineTitle": "The first four",
+    "lineIntro": "The whole line, in the order you use it.",
+    "routineTitle": "One routine, four steps",
+    "routineIntro": "Each product does one job. Use all four together, or start with the one you need most."
+  },
+  "shop": {
+    "title": "Shop all",
+    "intro": "Four products, one routine. Prices are in Egyptian pounds."
+  },
+  "product": {
+    "price": "Price",
+    "step": "Step {step} of {total}",
+    "size": "Size",
+    "howTo": "How to use",
+    "next": "Next in the routine",
+    "first": "Back to the start",
+    "addToBag": "Add to bag",
+    "orderingSoon": "Online ordering opens soon.",
+    "gallery": "{name}, photo {index}",
+    "allProducts": "All products"
+  },
+  "auth": {
+    "signInTitle": "Sign in",
+    "signUpTitle": "Create your account",
+    "name": "Full name",
+    "email": "Email",
+    "password": "Password",
+    "phone": "Phone (optional)",
+    "passwordHint": "At least 8 characters",
+    "submitSignIn": "Sign in",
+    "submitSignUp": "Create account",
+    "noAccount": "New here?",
+    "createOne": "Create an account",
+    "haveAccount": "Already have an account?"
+  },
+  "account": {
+    "title": "My account",
+    "greeting": "Hello, {name}"
+  },
+  "footer": {
+    "rights": "© {year} {storeName}. All rights reserved.",
+    "tagline": "Body care made to layer.",
+    "shop": "Shop",
+    "account": "Account"
+  },
+  "admin": {
+    "loginTitle": "Admin sign in",
+    "overview": "Overview",
+    "welcome": "Welcome back, {name}",
+    "overviewSoon": "Store metrics will appear here.",
+    "goToStore": "Go to storefront",
+    "signOut": "Sign out",
+    "noAccess": "You don't have permission to view this page.",
+    "sections": {
+      "main": "Main"
+    }
+  },
+  "errors": {
+    "VALIDATION": "Please check the fields and try again.",
+    "INVALID_CREDENTIALS": "Email or password is incorrect.",
+    "EMAIL_TAKEN": "An account with this email already exists.",
+    "RATE_LIMITED": "Too many attempts. Please try again in 15 minutes.",
+    "FORBIDDEN": "You don't have permission to do that.",
+    "NOT_FOUND": "Not found.",
+    "UNKNOWN": "Something went wrong. Please try again."
+  }
+}
