@@ -17,7 +17,7 @@ export const PRODUCT_FILM_WINDOWS = [
 ] as const;
 export const PRODUCT_FILM_REVEAL = 0.94;
 
-/** Home film (design/flow compose.py 'brand'): products dropping, one Flow ingredient moment per product, then the Blender line-up. */
+/** Home film (design/flow compose.py 'brand'): products dropping, one Flow moment per product, then the four packshots. */
 export const BRAND_FILM_WINDOWS = [
   [0.2, 0.33],
   [0.35, 0.5],
@@ -51,6 +51,8 @@ function flavorFilm(
 }
 
 const FINISH: Localized = { en: 'The finish', ar: 'اللمسة الأخيرة' };
+/** Endings from design/flow/ending.py: the Blueberry packshot, wiping to Marshmallow. */
+const BOTH: Localized = { en: 'Two flavours', ar: 'نكهتان' };
 
 FLOW_FILMS['body-wash'] = flavorFilm(
   0.96,
@@ -81,7 +83,7 @@ FLOW_FILMS['body-wash'] = flavorFilm(
   ],
 );
 FLOW_FILMS['body-scrub'] = flavorFilm(
-  0.96,
+  0.95,
   [
     0.03,
     0.33,
@@ -92,64 +94,64 @@ FLOW_FILMS['body-scrub'] = flavorFilm(
   ],
   [
     0.37,
-    0.66,
+    0.65,
     { en: 'Marshmallow and fine sugar in a soft blush scrub.', ar: 'المارشميلو مع السكر الناعم في مقشّر وردي فاتح.' },
   ],
   [
-    0.7,
-    0.84,
+    0.69,
+    0.8,
     { en: 'The jar', ar: 'البرطمان' },
     { en: 'A wide jar with a screw lid that closes tight.', ar: 'برطمان واسع بغطاء محكم الإغلاق.' },
   ],
   [
-    0.87,
-    0.95,
-    FINISH,
+    0.84,
+    0.93,
+    BOTH,
     {
-      en: 'Printed with the GIRLÉ G. Two or three times a week, after washing.',
-      ar: 'مطبوع عليه شعار GIRLÉ. مرتين أو ثلاث مرات أسبوعياً بعد الغسول.',
+      en: 'Blueberry or Marshmallow, in a wide jar. Two or three times a week, after washing.',
+      ar: 'التوت الأزرق أو المارشميلو، في برطمان واسع. مرتين أو ثلاث مرات أسبوعياً بعد الغسول.',
     },
   ],
 );
 FLOW_FILMS['body-lotion'] = flavorFilm(
-  0.96,
+  0.95,
   [
     0.03,
-    0.37,
+    0.4,
     { en: 'A creamy deep pink lotion with a blueberry scent.', ar: 'لوشن كريمي وردي داكن برائحة التوت الأزرق.' },
   ],
   [
-    0.42,
-    0.74,
+    0.44,
+    0.77,
     { en: 'A silky blush lotion, soft and sweet as marshmallow.', ar: 'لوشن حريري وردي فاتح، ناعم وحلو كالمارشميلو.' },
   ],
   [
-    0.8,
-    0.94,
-    FINISH,
+    0.81,
+    0.93,
+    BOTH,
     {
-      en: 'A soft white bottle with a flip cap. Right after the shower, on damp skin.',
-      ar: 'عبوة بيضاء ناعمة بغطاء قلّاب. بعد الاستحمام مباشرة على بشرة رطبة.',
+      en: 'Blueberry or Marshmallow, in a soft white bottle. Right after the shower, on damp skin.',
+      ar: 'التوت الأزرق أو المارشميلو، في عبوة بيضاء ناعمة. بعد الاستحمام مباشرة على بشرة رطبة.',
     },
   ],
 );
 FLOW_FILMS['body-splash'] = flavorFilm(
   0.95,
-  [0.03, 0.3, { en: 'A juicy blueberry splash in a clear deep pink.', ar: 'سبلاش التوت الأزرق بلون وردي داكن شفاف.' }],
-  [0.35, 0.6, { en: 'A sweet marshmallow splash in a clear blush pink.', ar: 'سبلاش المارشميلو بلون وردي فاتح شفاف.' }],
+  [0.03, 0.29, { en: 'A juicy blueberry splash in a clear deep pink.', ar: 'سبلاش التوت الأزرق بلون وردي داكن شفاف.' }],
+  [0.33, 0.58, { en: 'A sweet marshmallow splash in a clear blush pink.', ar: 'سبلاش المارشميلو بلون وردي فاتح شفاف.' }],
   [
-    0.64,
-    0.8,
+    0.62,
+    0.76,
     { en: 'The bottle', ar: 'العبوة' },
     { en: 'A spray pump under a clear cap, ready for your bag.', ar: 'بخاخ تحت غطاء شفاف، جاهز لحقيبتك.' },
   ],
   [
-    0.84,
-    0.94,
-    FINISH,
+    0.8,
+    0.93,
+    BOTH,
     {
-      en: 'Printed with the GIRLÉ G. Spray it on last, and any time after.',
-      ar: 'مطبوع عليه شعار GIRLÉ. رشّيه في النهاية ومتى شئتِ.',
+      en: 'Blueberry or Marshmallow, with a fine spray. Spray it on last, and any time after.',
+      ar: 'التوت الأزرق أو المارشميلو، برذاذ ناعم. رشّيه في النهاية ومتى شئتِ.',
     },
   ],
 );

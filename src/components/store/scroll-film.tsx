@@ -18,6 +18,11 @@ type Props = {
   portraitZoom?: number;
   /** Where (0–1 across the frame) the portrait view is centred by the end of the film; 0.5 is the middle. */
   portraitFocusEnd?: number;
+  /**
+   * From lg up the words float beside the film: at the reading start ('start'), or always on the left
+   * ('left') when the frame keeps its empty space there whatever the language.
+   */
+  textSide?: 'start' | 'left';
   className?: string;
 };
 
@@ -28,7 +33,19 @@ const ramp = (a: number, b: number, x: number) => Math.min(1, Math.max(0, (x - a
  * captions that switch on per stage and a closing reveal. Reduced motion gets the last frame
  * and every caption as a list.
  */
-export function ScrollFilm({ basePath, count, poster, intro, captions, reveal, labels, portraitZoom = 2.2, portraitFocusEnd = 0.5, className }: Props) {
+export function ScrollFilm({
+  basePath,
+  count,
+  poster,
+  intro,
+  captions,
+  reveal,
+  labels,
+  portraitZoom = 2.2,
+  portraitFocusEnd = 0.5,
+  textSide = 'start',
+  className,
+}: Props) {
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -184,7 +201,10 @@ export function ScrollFilm({ basePath, count, poster, intro, captions, reveal, l
 
   // Phones: the film fills the top of the screen and the words sit underneath it, never on it.
   // From lg up the film is full-bleed and the words float on its left.
-  const textStart = 'lg:start-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))]';
+  const textStart =
+    textSide === 'left'
+      ? 'lg:left-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))]'
+      : 'lg:start-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))]';
   return (
     <section ref={sectionRef} className={cn('relative h-[380vh] bg-studio text-ink sm:h-[440vh]', className)}>
       <div ref={stageRef} className="sticky top-16 flex h-[calc(100svh-4rem)] flex-col overflow-hidden lg:block">
@@ -236,6 +256,8 @@ export function ScrollFilm({ basePath, count, poster, intro, captions, reveal, l
             className={cn(
               'absolute inset-x-4 top-4 z-10 transition duration-500 motion-reduce:transition-none sm:inset-x-6 lg:inset-x-auto lg:top-auto lg:bottom-24',
               textStart,
+              // the left-hand space narrows with the screen; stay inside it
+              textSide === 'left' && 'lg:w-[min(26rem,28vw)]',
               revealOn ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-3 opacity-0',
             )}
           >
