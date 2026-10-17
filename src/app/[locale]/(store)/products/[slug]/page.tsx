@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { findFlavor, findStarterProduct, flavors, starterProducts } from '@/brand/catalog';
 import { filmFrames, productFilmReveal, productFilmStages } from '@/brand/films';
+import { SplitHeading } from '@/components/motion/split-heading';
 import { ScrollFilm } from '@/components/store/scroll-film';
 import { Button } from '@/components/ui/button';
 import { localize } from '@/core/i18n/localize';
@@ -96,7 +97,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
           {[images.front, images.detail].map((src, i) => (
             <div
               key={src}
-              className="relative aspect-[4/5] w-[85%] shrink-0 snap-center overflow-hidden rounded-[2rem] bg-studio sm:w-[70%] lg:w-full"
+              className="relative aspect-[4/5] w-[85%] shrink-0 snap-center overflow-hidden rounded-[2rem] bg-studio animate-in duration-500 fade-in-0 zoom-in-[0.97] motion-reduce:animate-none sm:w-[70%] lg:w-full"
             >
               <Image
                 src={src}
@@ -113,7 +114,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
           <p className="text-sm font-medium text-muted-foreground">
             {t('step', { step: num(product.step), total: num(starterProducts.length) })}
           </p>
-          <h2 className="mt-2 font-display text-5xl leading-none sm:text-6xl">{name}</h2>
+          <SplitHeading className="mt-2 font-display text-5xl leading-none sm:text-6xl">{name}</SplitHeading>
           <p className="mt-4 text-lg text-pretty">{localize(product.tagline, locale)}</p>
           <dl className="mt-6 flex items-baseline gap-6">
             <div>

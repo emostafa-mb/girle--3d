@@ -2,6 +2,9 @@ import Image from 'next/image';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { flavors, starterProducts } from '@/brand/catalog';
 import { BRAND_FILM_REVEAL, BRAND_FILM_WINDOWS, filmFrames } from '@/brand/films';
+import { Reveal } from '@/components/motion/reveal';
+import { SplitHeading } from '@/components/motion/split-heading';
+import { VelocityMarquee } from '@/components/motion/velocity-marquee';
 import { ProductCard } from '@/components/store/product-card';
 import { ScrollFilm } from '@/components/store/scroll-film';
 import { Button } from '@/components/ui/button';
@@ -56,12 +59,12 @@ export default async function HomePage() {
 
       <section aria-labelledby="line-title" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:py-28">
         <div className="mb-10">
-          <h2 id="line-title" className="font-display text-4xl sm:text-5xl">
+          <SplitHeading id="line-title" className="font-display text-4xl sm:text-5xl">
             {t('lineTitle')}
-          </h2>
+          </SplitHeading>
           <p className="mt-3 text-muted-foreground">{t('lineIntro')}</p>
         </div>
-        <div className="grid grid-cols-2 gap-x-4 gap-y-10 lg:grid-cols-4 lg:gap-x-6">
+        <Reveal className="grid grid-cols-2 gap-x-4 gap-y-10 lg:grid-cols-4 lg:gap-x-6">
           {starterProducts.map((p) => (
             <ProductCard
               key={p.slug}
@@ -71,12 +74,44 @@ export default async function HomePage() {
               sizes="(min-width: 1024px) 25vw, 50vw"
             />
           ))}
-        </div>
+        </Reveal>
       </section>
+
+      <VelocityMarquee
+        className="bg-ink py-8 text-white sm:py-12 dark:bg-petal"
+        rows={[
+          {
+            items: flavors.flatMap((f) => [
+              <span
+                key={`${f.id}-name`}
+                className="px-5 font-display text-6xl leading-[1.15] sm:px-8 sm:text-8xl"
+                style={{ color: f.swatch }}
+              >
+                {localize(f.name, locale)}
+              </span>,
+              <span key={`${f.id}-dot`} className="size-4 rounded-full sm:size-6" style={{ backgroundColor: f.swatch }} />,
+            ]),
+          },
+          {
+            reverse: true,
+            className: 'mt-3 sm:mt-5',
+            items: starterProducts.map((p) => (
+              <span key={p.slug} className="px-6 text-lg font-semibold text-white/80 sm:text-2xl">
+                {localize(p.name, locale)}
+                <span className="ms-12 text-bubblegum">✦</span>
+              </span>
+            )),
+          },
+        ]}
+      />
 
       <section id="routine" aria-labelledby="routine-title" className="scroll-mt-16 bg-petal">
         <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1.25fr_1fr] lg:py-28">
-          <div className="grid aspect-[4/3] grid-cols-4 gap-1 overflow-hidden rounded-[2rem] sm:aspect-[16/10]">
+          <Reveal
+            y={60}
+            stagger={0.12}
+            className="grid aspect-[4/3] grid-cols-4 gap-1 overflow-hidden rounded-[2rem] sm:aspect-[16/10]"
+          >
             {starterProducts.map((p, i) => (
               <div key={p.slug} className="relative bg-studio">
                 <Image
@@ -88,13 +123,18 @@ export default async function HomePage() {
                 />
               </div>
             ))}
-          </div>
+          </Reveal>
           <div>
-            <h2 id="routine-title" className="font-display text-4xl sm:text-5xl">
+            <SplitHeading id="routine-title" className="font-display text-4xl sm:text-5xl">
               {t('routineTitle')}
-            </h2>
+            </SplitHeading>
             <p className="mt-3 max-w-md text-muted-foreground">{t('routineIntro')}</p>
-            <ol className="mt-8 divide-y divide-ink/10 border-y border-ink/10 dark:divide-white/10 dark:border-white/10">
+            <Reveal
+              as="ol"
+              stagger={0.1}
+              y={20}
+              className="mt-8 divide-y divide-ink/10 border-y border-ink/10 dark:divide-white/10 dark:border-white/10"
+            >
               {starterProducts.map((p) => (
                 <li key={p.slug}>
                   <Link href={`/products/${p.slug}`} className="group flex items-center gap-5 py-4">
@@ -111,7 +151,7 @@ export default async function HomePage() {
                   </Link>
                 </li>
               ))}
-            </ol>
+            </Reveal>
           </div>
         </div>
       </section>
