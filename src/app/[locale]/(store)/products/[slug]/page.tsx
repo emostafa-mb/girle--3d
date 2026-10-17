@@ -3,11 +3,13 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { findStarterProduct, starterProducts } from '@/brand/catalog';
-import { ProductViewer } from '@/components/store/product-viewer';
+import { filmFrames, productFilmReveal, productFilmStages } from '@/brand/films';
+import { ScrollFilm } from '@/components/store/scroll-film';
 import { Button } from '@/components/ui/button';
 import { localize } from '@/core/i18n/localize';
 import { formatMoney } from '@/core/money';
 import { Link } from '@/i18n/navigation';
+import { jsonForScript } from '@/lib/json-script';
 import { getStoreSettings } from '@/server/store';
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
@@ -27,7 +29,7 @@ export default async function ProductPage({ params }: Props) {
   const { locale, slug } = await params;
   const product = findStarterProduct(slug);
   if (!product) notFound();
-  const [t, settings] = await Promise.all([getTranslations('product'), getStoreSettings()]);
+  const [t, tf, settings] = await Promise.all([getTranslations('product'), getTranslations('film'), getStoreSettings()]);
   const name = localize(product.name, locale);
   // Arabic copy uses Arabic-Indic digits, matching prices and sizes.
   const num = (n: number) => n.toLocaleString(locale === 'ar' ? 'ar-EG' : 'en');
@@ -49,36 +51,63 @@ export default async function ProductPage({ params }: Props) {
     },
   };
 
+  const stages = productFilmStages(product.slug);
+
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:py-14">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} />
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonForScript(jsonLd) }} />
+      <ScrollFilm
+        {...filmFrames(product.slug)}
+        intro={{ title: name, hint: tf('hint') }}
+        captions={stages.map((st, i) => ({
+          from: st.from,
+          to: st.to,
+          title: localize(st.title, locale),
+          body: localize(st.body, locale),
+          marker: num(i + 1),
+        }))}
+        reveal={{
+          at: productFilmReveal(product.slug),
+          title: name,
+          meta: price,
+          action: (
+            <a
+              href="#details"
+              className="inline-flex h-12 items-center rounded-full bg-ink px-6 text-base font-medium text-white hover:bg-ink/85"
+            >
+              {tf('details')}
+            </a>
+          ),
+        }}
+        labels={{ steps: tf('steps', { name }) }}
+      />
+    <div id="details" className="mx-auto max-w-7xl scroll-mt-16 px-4 py-12 sm:px-6 lg:py-20" data-testid="product-details">
       <Link href="/shop" className="text-sm text-muted-foreground hover:text-foreground hover:underline">
         {t('allProducts')}
       </Link>
       <div className="mt-6 grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:gap-16">
         <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 sm:mx-0 sm:px-0 lg:flex-col lg:overflow-visible">
-          <div
-            className="relative aspect-[4/5] w-[85%] shrink-0 snap-center overflow-hidden rounded-[2rem] bg-studio sm:w-[70%] lg:w-full"
-            data-testid="product-3d"
-          >
-            <ProductViewer src={product.model} poster={product.images.front} name={name} />
-          </div>
-          <div className="relative aspect-[4/5] w-[85%] shrink-0 snap-center overflow-hidden rounded-[2rem] bg-studio sm:w-[70%] lg:w-full">
-            <Image
-              src={product.images.angle}
-              alt={t('gallery', { name, index: num(2) })}
-              fill
-              sizes="(min-width: 1024px) 55vw, 85vw"
-              className="object-cover"
-            />
-          </div>
+          {[product.images.front, product.images.angle].map((src, i) => (
+            <div
+              key={src}
+              className="relative aspect-[4/5] w-[85%] shrink-0 snap-center overflow-hidden rounded-[2rem] bg-studio sm:w-[70%] lg:w-full"
+            >
+              <Image
+                src={src}
+                alt={t('gallery', { name, index: num(i + 1) })}
+                fill
+                sizes="(min-width: 1024px) 55vw, 85vw"
+                className="object-cover"
+              />
+            </div>
+          ))}
         </div>
 
         <div className="lg:sticky lg:top-24 lg:self-start">
           <p className="text-sm font-medium text-muted-foreground">
             {t('step', { step: num(product.step), total: num(starterProducts.length) })}
           </p>
-          <h1 className="mt-2 font-display text-5xl leading-none sm:text-6xl">{name}</h1>
+          <h2 className="mt-2 font-display text-5xl leading-none sm:text-6xl">{name}</h2>
           <p className="mt-4 text-lg text-pretty">{localize(product.tagline, locale)}</p>
           <dl className="mt-6 flex items-baseline gap-6">
             <div>
@@ -104,10 +133,10 @@ export default async function ProductPage({ params }: Props) {
 
           <p className="mt-10 leading-relaxed text-pretty">{localize(product.description, locale)}</p>
 
-          <h2 className="mt-8 text-lg font-semibold">{t('howTo')}</h2>
+          <h3 className="mt-8 text-lg font-semibold">{t('howTo')}</h3>
           <p className="mt-2 leading-relaxed text-pretty text-muted-foreground">{localize(product.howTo, locale)}</p>
 
-          <h2 className="mt-10 text-lg font-semibold">{next ? t('next') : t('first')}</h2>
+          <h3 className="mt-10 text-lg font-semibold">{next ? t('next') : t('first')}</h3>
           <Link
             href={`/products/${pairing.slug}`}
             className="group mt-3 flex items-center gap-4 rounded-[1.5rem] bg-petal p-3 pe-5"
@@ -126,5 +155,6 @@ export default async function ProductPage({ params }: Props) {
         </div>
       </div>
     </div>
+    </>
   );
 }

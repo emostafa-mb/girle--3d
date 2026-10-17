@@ -25,8 +25,18 @@ test('shop lists the line and opens a product page', async ({ page }) => {
   await expect(page).toHaveURL(/\/en\/products\/body-butter$/);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Body butter');
   await expect(page.getByTestId('product-price')).toHaveText('EGP 420');
-  await expect(page.getByTestId('product-3d').locator('model-viewer')).toHaveAttribute('src', '/models/body-butter.glb');
+  await expect(page.getByRole('list', { name: 'How Body butter comes together' }).getByRole('listitem')).toHaveCount(4);
   await expect(page.getByRole('button', { name: 'Add to bag' })).toBeDisabled();
+});
+
+test('reduced motion shows the film as a still with every step', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/en/products/body-wash');
+  await expect(page.locator('canvas')).toHaveCount(0);
+  const steps = page.getByRole('list', { name: 'How Body wash comes together' }).getByRole('listitem');
+  await expect(steps).toHaveCount(4);
+  await expect(steps.first()).toBeVisible();
+  await expect(page.getByRole('link', { name: 'See details' })).toBeVisible();
 });
 
 test('unknown product shows not found', async ({ page }) => {
