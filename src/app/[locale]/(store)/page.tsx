@@ -76,8 +76,18 @@ export default async function HomePage() {
 
       <section id="routine" aria-labelledby="routine-title" className="scroll-mt-16 bg-petal">
         <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1.25fr_1fr] lg:py-28">
-          <div className="relative aspect-[16/9] overflow-hidden rounded-[2rem] bg-studio">
-            <Image src="/brand/lineup.jpg" alt="" fill sizes="(min-width: 1024px) 55vw, 100vw" className="object-cover" />
+          <div className="grid aspect-[4/3] grid-cols-4 gap-1 overflow-hidden rounded-[2rem] sm:aspect-[16/10]">
+            {starterProducts.map((p) => (
+              <div key={p.slug} className="relative bg-studio">
+                <Image
+                  src={p.images.front}
+                  alt={localize(p.name, locale)}
+                  fill
+                  sizes="(min-width: 1024px) 14vw, 25vw"
+                  className="object-cover"
+                />
+              </div>
+            ))}
           </div>
           <div>
             <h2 id="routine-title" className="font-display text-4xl sm:text-5xl">
