@@ -53,7 +53,7 @@ export const starterProducts: readonly StarterProduct[] = [
     },
     size: { en: '150 ml', ar: '١٥٠ مل' },
     price: 35000,
-    images: { front: '/products/body-lotion-front.jpg', detail: '/products/body-lotion-detail.jpg' },
+    images: { front: '/products/body-lotion-packshot.jpg', detail: '/products/body-lotion-detail.jpg' },
     step: 2,
     stepNote: { en: 'Right after, on damp skin', ar: 'بعده مباشرة على بشرة رطبة' },
   },
