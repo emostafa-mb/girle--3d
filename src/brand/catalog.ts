@@ -5,6 +5,29 @@ import type { Localized } from '@/core/i18n/localize';
  * replaces it. Prices are in minor units (piastres). Sizes, prices and copy are starting
  * values for the client to confirm.
  */
+/** Every product comes in the same two flavours. The first is the default. */
+export const flavors = [
+  { id: 'blueberry', name: { en: 'Blueberry', ar: 'توت أزرق' }, swatch: '#b5265e' },
+  { id: 'marshmallow', name: { en: 'Marshmallow', ar: 'مارشميلو' }, swatch: '#f6cfd5' },
+] as const satisfies readonly { id: string; name: Localized; swatch: string }[];
+
+export type FlavorId = (typeof flavors)[number]['id'];
+export type Flavor = (typeof flavors)[number];
+export type ProductImages = { front: string; detail: string };
+
+export function findFlavor(id: string | string[] | undefined): Flavor {
+  return flavors.find((f) => f.id === id) ?? flavors[0];
+}
+
+/** Each flavour has its own packshot and ingredients shot (design/flow/photos.py). */
+function flavorImages(slug: string): Record<FlavorId, ProductImages> {
+  const images = (flavor: FlavorId): ProductImages => ({
+    front: `/products/${slug}-${flavor}-packshot.jpg`,
+    detail: `/products/${slug}-${flavor}-detail.jpg`,
+  });
+  return { blueberry: images('blueberry'), marshmallow: images('marshmallow') };
+}
+
 export type StarterProduct = {
   slug: string;
   name: Localized;
@@ -13,8 +36,8 @@ export type StarterProduct = {
   howTo: Localized;
   size: Localized;
   price: number;
-  /** front: the packshot; detail: the ingredients shot from the product's Flow film. */
-  images: { front: string; detail: string };
+  /** Per flavour: front is the packshot, detail the ingredients shot from the product's Flow film. */
+  images: Record<FlavorId, ProductImages>;
   /** Position in the daily routine, starting at 1. */
   step: number;
   stepNote: Localized;
@@ -35,7 +58,7 @@ export const starterProducts: readonly StarterProduct[] = [
     },
     size: { en: '250 ml', ar: '٢٥٠ مل' },
     price: 32000,
-    images: { front: '/products/body-wash-packshot.jpg', detail: '/products/body-wash-detail.jpg' },
+    images: flavorImages('body-wash'),
     step: 1,
     stepNote: { en: 'In the shower', ar: 'أثناء الاستحمام' },
   },
@@ -53,7 +76,7 @@ export const starterProducts: readonly StarterProduct[] = [
     },
     size: { en: '200 g', ar: '٢٠٠ جم' },
     price: 42000,
-    images: { front: '/products/body-scrub-packshot.jpg', detail: '/products/body-scrub-detail.jpg' },
+    images: flavorImages('body-scrub'),
     step: 2,
     stepNote: { en: 'After washing, two or three times a week', ar: 'بعد الغسول، مرتين أو ثلاث مرات أسبوعياً' },
   },
@@ -71,25 +94,25 @@ export const starterProducts: readonly StarterProduct[] = [
     },
     size: { en: '150 ml', ar: '١٥٠ مل' },
     price: 35000,
-    images: { front: '/products/body-lotion-packshot.jpg', detail: '/products/body-lotion-detail.jpg' },
+    images: flavorImages('body-lotion'),
     step: 3,
     stepNote: { en: 'Right after, on damp skin', ar: 'بعده مباشرة على بشرة رطبة' },
   },
   {
-    slug: 'body-mist',
-    name: { en: 'Body mist', ar: 'معطّر الجسم' },
-    tagline: { en: 'A fine mist to finish.', ar: 'رذاذ ناعم للمسة الأخيرة.' },
+    slug: 'body-splash',
+    name: { en: 'Body splash', ar: 'بودي سبلاش' },
+    tagline: { en: 'A light, scented splash to finish.', ar: 'سبلاش خفيف ومعطّر للمسة الأخيرة.' },
     description: {
-      en: 'A fine, even mist that leaves a soft scent on skin, hair and clothes. Small enough for your bag, so you can top up during the day.',
-      ar: 'رذاذ ناعم ومتساوٍ يترك رائحة لطيفة على البشرة والشعر والملابس. حجمه يناسب حقيبتك لتجدّديه خلال اليوم.',
+      en: 'A light, refreshing splash that leaves a soft scent on skin and clothes. Spray it on generously after your lotion, and again whenever you like.',
+      ar: 'سبلاش خفيف ومنعش يترك رائحة لطيفة على البشرة والملابس. رشّيه بسخاء بعد اللوشن، ومرة أخرى متى شئتِ.',
     },
     howTo: {
-      en: 'Hold 15–20 cm away and spray over skin or clothes. Reapply whenever you like.',
-      ar: 'رشّيه من مسافة ١٥–٢٠ سم على البشرة أو الملابس، وكرّريه متى شئتِ.',
+      en: 'Spray generously over skin or clothes from 15–20 cm away. Reapply during the day.',
+      ar: 'رشّيه بسخاء على البشرة أو الملابس من مسافة ١٥–٢٠ سم، وجدّديه خلال اليوم.',
     },
     size: { en: '150 ml', ar: '١٥٠ مل' },
     price: 38000,
-    images: { front: '/products/body-mist-packshot.jpg', detail: '/products/body-mist-detail.jpg' },
+    images: flavorImages('body-splash'),
     step: 4,
     stepNote: { en: 'Last, and whenever you like', ar: 'في النهاية، ومتى شئتِ' },
   },

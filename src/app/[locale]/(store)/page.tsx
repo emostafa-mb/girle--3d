@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { getLocale, getTranslations } from 'next-intl/server';
-import { starterProducts } from '@/brand/catalog';
+import { flavors, starterProducts } from '@/brand/catalog';
 import { BRAND_FILM_REVEAL, BRAND_FILM_WINDOWS, filmFrames } from '@/brand/films';
 import { ProductCard } from '@/components/store/product-card';
 import { ScrollFilm } from '@/components/store/scroll-film';
@@ -77,10 +77,10 @@ export default async function HomePage() {
       <section id="routine" aria-labelledby="routine-title" className="scroll-mt-16 bg-petal">
         <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1.25fr_1fr] lg:py-28">
           <div className="grid aspect-[4/3] grid-cols-4 gap-1 overflow-hidden rounded-[2rem] sm:aspect-[16/10]">
-            {starterProducts.map((p) => (
+            {starterProducts.map((p, i) => (
               <div key={p.slug} className="relative bg-studio">
                 <Image
-                  src={p.images.front}
+                  src={p.images[flavors[i % flavors.length].id].front}
                   alt={localize(p.name, locale)}
                   fill
                   sizes="(min-width: 1024px) 14vw, 25vw"

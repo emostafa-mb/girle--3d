@@ -1,10 +1,9 @@
-"""Product photos: an ingredients shot per product from its Flow clip, the body wash packshot
-(Flow's blank bottle), and packshots from blank-packaging stills made in Gemini/Flow (stills/).
-The GIRLÉ print is added to every packshot here, so the logo is always the real one.
+"""Product photos per flavour: a packshot from a blank-packaging still made in Gemini/Flow (stills/), with
+the real GIRLÉ print wrapped onto it, and an ingredients shot from the flavour's Flow clip.
 
 Run from the repo root:  python design/flow/photos.py <downloads folder> <label folder>
-<label folder> holds the print artwork from design/packshots/labels.py (wash.png, lotion.png, ...).
-Writes JPEGs to public/products/.
+<label folder> holds the print artwork from design/packshots/labels.py (wash-blueberry.png, ...).
+Writes public/products/<product>-<flavour>-packshot.jpg and -detail.jpg.
 """
 import pathlib
 import sys
@@ -14,24 +13,33 @@ import numpy as np
 from PIL import Image
 
 downloads, labels = pathlib.Path(sys.argv[1]), pathlib.Path(sys.argv[2])
+STILLS = pathlib.Path(__file__).parent / 'stills'
 OUT = pathlib.Path('public/products')
 W, H = 576, 720  # a 4:5 window out of the 1280x720 frame
 
-# product slug -> (clip, second, centre x of the crop)
-INGREDIENTS = {
-    'body-wash': ('Fruit_pieces_and_oil_splash_20261017201611.mp4', 3.4, 640),
-    'body-lotion': ('Coconut_milk_and_oil_swirl_20261017203607.mp4', 3.0, 830),
-    'body-scrub': ('Ingredients_whipping_into_pink_b…_20261017203443.mp4', 2.5, 600),
-    'body-mist': ('Fruits_and_petals_drifting_20261017204030.mp4', 3.6, 640),
+# <product>-<flavour> -> (clip, second, centre x of the crop)
+DETAILS = {
+    'body-wash-blueberry': ('Blueberries_and_gel_ribbon_swirling_20261017220747.mp4', 1.6, 640),
+    'body-wash-marshmallow': ('Gel_ribbon_and_marshmallows_boun…_20261017220830.mp4', 4.2, 640),
+    'body-scrub-blueberry': ('Blueberries_and_sugar_tumbling_20261017220926.mp4', 4.5, 640),
+    'body-scrub-marshmallow': ('Marshmallows_and_sugar_forming_s…_20261017221126.mp4', 6.0, 640),
+    'body-lotion-blueberry': ('Blueberries_and_lotion_swirling_20261017221342.mp4', 1.2, 640),
+    'body-lotion-marshmallow': ('Creamy_lotion_swirls_and_marshma…_20261017221351.mp4', 3.0, 640),
+    'body-splash-blueberry': ('Blueberries_dropping_into_liquid_20261017221417.mp4', 3.0, 640),
+    'body-splash-marshmallow': ('Marshmallows_splash_into_pink_li…_20261017221433.mp4', 2.9, 640),
 }
-WASH_BOTTLE = ('Fruit_and_oil_blending_20261017201620.mp4', 9.95)
-# Same geometry as compose_wash.py: the bottle's body centre x, radius, print centre y and print width.
-WASH_GEOMETRY = (640, 100, 430, 150)
-# Stills with blank packaging (design/flow/stills/<slug>.jpg) -> label and the same geometry, in pixels.
-STILLS = {
-    'body-lotion': ('lotion.png', (448, 103, 723, 150)),
-    'body-scrub': ('scrub.png', (447, 215, 782, 200)),
-    'body-mist': ('mist.png', (449, 94, 766, 140)),
+
+# stills/<product>-<flavour>.jpg -> (label artwork, (bottle centre x, radius, print centre y, print width)) in
+# the still's pixels. White ink where the contents are dark.
+PACKSHOTS = {
+    'body-wash-blueberry': ('wash-blueberry-white.png', (448, 125, 470, 170)),
+    'body-wash-marshmallow': ('wash-marshmallow.png', (447, 112, 520, 160)),
+    'body-scrub-blueberry': ('scrub-blueberry-white.png', (447, 257, 700, 260)),
+    'body-scrub-marshmallow': ('scrub-marshmallow.png', (447, 242, 680, 240)),
+    'body-lotion-blueberry': ('lotion-blueberry.png', (447, 115, 690, 160)),
+    'body-lotion-marshmallow': ('lotion-marshmallow.png', (447, 114, 700, 160)),
+    'body-splash-blueberry': ('splash-blueberry-white.png', (448, 97, 700, 140)),
+    'body-splash-marshmallow': ('splash-marshmallow.png', (449, 91, 710, 132)),
 }
 
 
@@ -76,11 +84,8 @@ def add_print(rgb, label_file, geometry):
     return rgb
 
 
-for slug, (clip, t, cx) in INGREDIENTS.items():
-    save(crop(frame(clip, t), cx), f'{slug}-detail.jpg')
-save(crop(add_print(frame(*WASH_BOTTLE), 'wash.png', WASH_GEOMETRY), WASH_GEOMETRY[0]), 'body-wash-packshot.jpg')
-for slug, (label_file, geometry) in STILLS.items():
-    still = pathlib.Path(__file__).parent / 'stills' / f'{slug}.jpg'
-    if still.exists():
-        rgb = np.asarray(Image.open(still).convert('RGB')).astype(np.float32)
-        save(add_print(rgb, label_file, geometry), f'{slug}-packshot.jpg')
+for name, (clip, t, cx) in DETAILS.items():
+    save(crop(frame(clip, t), cx), f'{name}-detail.jpg')
+for name, (label_file, geometry) in PACKSHOTS.items():
+    rgb = np.asarray(Image.open(STILLS / f'{name}.jpg').convert('RGB')).astype(np.float32)
+    save(add_print(rgb, label_file, geometry), f'{name}-packshot.jpg')
