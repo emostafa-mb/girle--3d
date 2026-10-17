@@ -13,11 +13,15 @@ blender -b --factory-startup -P scene.py -- . preview          # quick 30% rende
 blender -b --factory-startup -P scene.py -- . final hero lineup # full size in ./renders; omit names for all
 ```
 
-Web 3D models for the product viewer (`public/models/<slug>.glb`):
+Scroll films (120 frames each) for the product pages and the home page:
 
 ```bash
-blender -b --factory-startup -P scene.py -- . glb   # writes ./models/{wash,mist,butter,lotion}.glb
+blender -b --factory-startup -P scene.py -- . film-preview wash 1 40 80 120   # a few low-res frames
+blender -b --factory-startup -P scene.py -- . film wash                        # one film per run: wash|lotion|butter|mist|brand
+python publish_films.py . ../..                                                # WebP frames into public/films/<slug>/
 ```
+
+The film timeline (texture, pour, cap, finish) is mirrored by the caption timings in `src/brand/films.ts`.
 
 Shot names: `wash|mist|butter|lotion` + `-front|-angle`, `hero`, `hero-rtl`, `lineup`.
 Renders are PNG; save them as JPEG (quality ~86) into `public/` under the names the storefront uses.

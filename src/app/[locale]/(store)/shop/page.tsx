@@ -11,10 +11,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 }
 
 export default async function ShopPage() {
-  const [locale, t, tp, settings] = await Promise.all([
+  const [locale, t, settings] = await Promise.all([
     getLocale(),
     getTranslations('shop'),
-    getTranslations('product'),
     getStoreSettings(),
   ]);
   return (
@@ -29,7 +28,6 @@ export default async function ShopPage() {
             locale={locale}
             currency={settings.currency}
             sizes="(min-width: 1024px) 25vw, 50vw"
-            badge3d={tp('viewer.badge')}
           />
         ))}
       </div>

@@ -1,29 +1,41 @@
 import Image from 'next/image';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { starterProducts } from '@/brand/catalog';
+import { BRAND_FILM_REVEAL, BRAND_FILM_WINDOWS, filmFrames } from '@/brand/films';
 import { ProductCard } from '@/components/store/product-card';
+import { ScrollFilm } from '@/components/store/scroll-film';
 import { Button } from '@/components/ui/button';
-import { isRtl } from '@/core/i18n/locales';
 import { localize } from '@/core/i18n/localize';
 import { Link } from '@/i18n/navigation';
 import { getStoreSettings } from '@/server/store';
 
 export default async function HomePage() {
-  const [locale, t, tp, settings] = await Promise.all([
+  const [locale, t, tf, settings] = await Promise.all([
     getLocale(),
     getTranslations('home'),
-    getTranslations('product'),
+    getTranslations('film'),
     getStoreSettings(),
   ]);
-  const rtl = isRtl(locale);
+  // Arabic copy uses Arabic-Indic digits, matching prices and sizes.
+  const num = (n: number) => n.toLocaleString(locale === 'ar' ? 'ar-EG' : 'en');
   return (
     <>
-      <section className="relative isolate overflow-hidden bg-studio text-ink">
-        <div className="relative z-10 mx-auto max-w-7xl px-4 pt-14 pb-8 sm:px-6 xl:flex xl:min-h-[min(46rem,calc(100dvh-4rem))] xl:items-center xl:py-24">
-          <div className="max-w-xl xl:max-w-[34rem]">
-            <h1 className="font-display text-[clamp(3rem,7.4vw,6rem)] leading-[0.95] text-balance">{t('heroTitle')}</h1>
-            <p className="mt-6 max-w-md text-lg leading-relaxed text-pretty">{t('heroSubtitle')}</p>
-            <div className="mt-8 flex flex-wrap gap-3">
+      <ScrollFilm
+        {...filmFrames('brand')}
+        intro={{ title: t('heroTitle'), hint: tf('brandHint') }}
+        captions={starterProducts.map((p, i) => ({
+          from: BRAND_FILM_WINDOWS[i][0],
+          to: BRAND_FILM_WINDOWS[i][1],
+          title: localize(p.name, locale),
+          body: localize(p.stepNote, locale),
+          marker: num(p.step),
+        }))}
+        reveal={{
+          at: BRAND_FILM_REVEAL,
+          title: t('lineTitle'),
+          body: t('heroSubtitle'),
+          action: (
+            <div className="flex flex-wrap gap-3">
               <Button asChild className="h-12 rounded-full bg-ink px-6 text-base text-white hover:bg-ink/85">
                 <Link href="/shop">{t('shopCta')}</Link>
               </Button>
@@ -35,25 +47,12 @@ export default async function HomePage() {
                 <Link href="#routine">{t('routineCta')}</Link>
               </Button>
             </div>
-          </div>
-        </div>
-        {/* The render keeps the products on the far side of the frame, so on wide screens the
-            headline sits on empty backdrop; narrower screens stack it above a cropped image. */}
-        <div className="relative aspect-[4/3] sm:aspect-[2/1] xl:absolute xl:inset-0 xl:aspect-auto">
-          <Image
-            src={rtl ? '/brand/hero-rtl.jpg' : '/brand/hero.jpg'}
-            alt=""
-            fill
-            preload
-            sizes="100vw"
-            className={
-              rtl
-                ? 'object-cover object-[8%_center] sm:object-[20%_center] xl:object-left'
-                : 'object-cover object-[92%_center] sm:object-[80%_center] xl:object-right'
-            }
-          />
-        </div>
-      </section>
+          ),
+        }}
+        labels={{ steps: tf('brandSteps') }}
+        portraitZoom={1.3}
+        portraitFocusEnd={0.62}
+      />
 
       <section aria-labelledby="line-title" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:py-28">
         <div className="mb-10">
@@ -70,7 +69,6 @@ export default async function HomePage() {
               locale={locale}
               currency={settings.currency}
               sizes="(min-width: 1024px) 25vw, 50vw"
-              badge3d={tp('viewer.badge')}
             />
           ))}
         </div>
@@ -94,7 +92,7 @@ export default async function HomePage() {
                       aria-hidden
                       className="grid size-11 shrink-0 place-items-center rounded-full bg-bubblegum font-display text-xl text-ink"
                     >
-                      {p.step.toLocaleString(locale === 'ar' ? 'ar-EG' : 'en')}
+                      {num(p.step)}
                     </span>
                     <span className="flex-1">
                       <span className="block text-lg font-semibold group-hover:underline">{localize(p.name, locale)}</span>
