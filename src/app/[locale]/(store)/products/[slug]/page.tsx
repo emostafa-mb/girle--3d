@@ -73,7 +73,7 @@ export default async function ProductPage({ params }: Props) {
           action: (
             <a
               href="#details"
-              className="inline-flex h-12 items-center rounded-full bg-ink px-6 text-base font-medium text-white hover:bg-ink/85"
+              className="inline-flex h-11 items-center rounded-full bg-ink px-5 text-sm font-medium text-white hover:bg-ink/85 sm:h-12 sm:px-6 sm:text-base"
             >
               {tf('details')}
             </a>

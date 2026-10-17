@@ -21,11 +21,13 @@ FRAMES = 150
 FILMS = {
     # Home: one ingredient moment per product, in routine order, then the Blender line-up and G.
     'brand': [
-        (0.0, 3.6, ('video', 'Fruit_pieces_and_oil_splash_20261017201611.mp4', 2.0, 5.6)),
-        (3.0, 6.6, ('video', 'Coconut_milk_and_oil_swirl_20261017203607.mp4', 1.5, 5.1)),
-        (6.0, 9.6, ('video', 'Ingredients_whipping_into_pink_b…_20261017203443.mp4', 0.8, 4.4)),
-        (9.0, 12.6, ('video', 'Fruits_and_petals_drifting_20261017204030.mp4', 1.5, 5.1)),
-        (12.0, 15.5, ('frames', 84, 120)),
+        # opening: products and drops falling (cut before that clip's own G appears)
+        (0.0, 3.6, ('video', 'Cosmetics_products_drop_on_floor_20261017205059.mp4', 0.0, 3.6)),
+        (3.0, 6.6, ('video', 'Fruit_pieces_and_oil_splash_20261017201611.mp4', 2.0, 5.6)),
+        (6.0, 9.6, ('video', 'Coconut_milk_and_oil_swirl_20261017203607.mp4', 1.5, 5.1)),
+        (9.0, 12.6, ('video', 'Ingredients_whipping_into_pink_b…_20261017203443.mp4', 0.8, 4.4)),
+        (12.0, 15.6, ('video', 'Fruits_and_petals_drifting_20261017204030.mp4', 1.5, 5.1)),
+        (15.0, 18.5, ('frames', 84, 120)),
     ],
     'body-butter': [
         (0.0, 10.0, ('video', 'Ingredients_whipping_into_pink_b…_20261017203443.mp4', 0.0, 10.0)),

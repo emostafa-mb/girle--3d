@@ -28,8 +28,9 @@ const ramp = (a: number, b: number, x: number) => Math.min(1, Math.max(0, (x - a
  * captions that switch on per stage and a closing reveal. Reduced motion gets the last frame
  * and every caption as a list.
  */
-export function ScrollFilm({ basePath, count, poster, intro, captions, reveal, labels, portraitZoom = 1.75, portraitFocusEnd = 0.5, className }: Props) {
+export function ScrollFilm({ basePath, count, poster, intro, captions, reveal, labels, portraitZoom = 2.2, portraitFocusEnd = 0.5, className }: Props) {
   const sectionRef = useRef<HTMLElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [p, setP] = useState(0);
   const [still, setStill] = useState(false);
@@ -37,8 +38,9 @@ export function ScrollFilm({ basePath, count, poster, intro, captions, reveal, l
 
   useEffect(() => {
     const section = sectionRef.current;
+    const stageEl = stageRef.current;
     const canvas = canvasRef.current;
-    if (!section || !canvas) return;
+    if (!section || !stageEl || !canvas) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time switch to the static layout
       setStill(true);
@@ -75,8 +77,6 @@ export function ScrollFilm({ basePath, count, poster, intro, captions, reveal, l
       }
       return null;
     };
-    const tiny = Object.assign(document.createElement('canvas'), { width: 32, height: 18 });
-    const tctx = tiny.getContext('2d');
     const size = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = Math.round(canvas.clientWidth * dpr);
@@ -88,39 +88,34 @@ export function ScrollFilm({ basePath, count, poster, intro, captions, reveal, l
       if (!im) return;
       const cw = canvas.width, ch = canvas.height, iw = im.naturalWidth, ih = im.naturalHeight;
       const cover = Math.max(cw / iw, ch / ih);
-      if (cw / ch >= 0.9 || !tctx) {
+      if (cw / ch >= 0.9) {
         ctx.drawImage(im, (cw - iw * cover) / 2, (ch - ih * cover) / 2, iw * cover, ih * cover);
         return;
       }
-      // portrait: show more of the frame; the studio colour at its top and bottom edge fills the rest
-      tctx.drawImage(im, 0, 0, tiny.width, tiny.height);
-      const edge = (row: number) => {
-        const [r, g, b] = tctx.getImageData(tiny.width / 2, row, 1, 1).data;
-        return [r, g, b] as const;
-      };
-      const top = edge(0), bottom = edge(tiny.height - 1);
-      ctx.fillStyle = `rgb(${top.join(',')})`;
-      ctx.fillRect(0, 0, cw, ch / 2);
-      ctx.fillStyle = `rgb(${bottom.join(',')})`;
-      ctx.fillRect(0, ch / 2, cw, ch / 2);
+      // portrait: show more of the frame and feather its top and bottom into the studio pink
+      const studio = getComputedStyle(stageEl).getPropertyValue('--studio').trim() || '#e9a5b7';
+      ctx.fillStyle = studio;
+      ctx.fillRect(0, 0, cw, ch);
       ctx.imageSmoothingQuality = 'high';
       const s = Math.min(cover, (cw * portraitZoom) / iw);
-      const w = iw * s, h = ih * s, y = ch * 0.44 - h / 2;
+      const w = iw * s, h = ih * s, y = ch * 0.5 - h / 2;
       const focus = 0.5 + (portraitFocusEnd - 0.5) * ramp(0.7, 0.95, smooth);
       const x = Math.min(0, Math.max(cw - w, cw / 2 - focus * w));
       ctx.drawImage(im, x, y, w, h);
-      const fade = 56 * (cw / 390);
-      for (const [y0, y1, [r, g, b]] of [[y, y + fade, top], [y + h, y + h - fade, bottom]] as const) {
-        const grad = ctx.createLinearGradient(0, y0, 0, y1);
-        grad.addColorStop(0, `rgba(${r},${g},${b},1)`);
-        grad.addColorStop(1, `rgba(${r},${g},${b},0)`);
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, Math.min(y0, y1), cw, Math.abs(y1 - y0));
+      if (h < ch) {
+        const fade = Math.min(h / 4, 56 * (cw / 390));
+        for (const [y0, y1] of [[y, y + fade], [y + h, y + h - fade]]) {
+          const grad = ctx.createLinearGradient(0, y0, 0, y1);
+          grad.addColorStop(0, studio);
+          grad.addColorStop(1, 'transparent');
+          ctx.fillStyle = grad;
+          ctx.fillRect(0, Math.min(y0, y1), cw, Math.abs(y1 - y0));
+        }
       }
     };
     const progress = () => {
       const r = section.getBoundingClientRect();
-      const stage = canvas.clientHeight || window.innerHeight;
+      const stage = stageEl.clientHeight || window.innerHeight;
       return Math.min(1, Math.max(0, -r.top / Math.max(1, r.height - stage)));
     };
     let last = 0;
@@ -187,60 +182,75 @@ export function ScrollFilm({ basePath, count, poster, intro, captions, reveal, l
     );
   }
 
+  // Phones: the film fills the top of the screen and the words sit underneath it, never on it.
+  // From lg up the film is full-bleed and the words float on its left.
+  const textStart = 'lg:start-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))]';
   return (
     <section ref={sectionRef} className={cn('relative h-[380vh] bg-studio text-ink sm:h-[440vh]', className)}>
-      <div className="sticky top-16 h-[calc(100svh-4rem)] overflow-hidden">
-        <canvas ref={canvasRef} aria-hidden className="absolute inset-0 size-full" />
-
-        <div
-          className="absolute inset-x-0 top-0 z-10 mx-auto max-w-7xl px-4 pt-10 sm:px-6 sm:pt-16"
-          style={{ opacity: introOpacity, transform: `translateY(${-24 * (1 - introOpacity)}px)` }}
-        >
-          <Heading className="max-w-[12ch] font-display text-[clamp(2.8rem,7vw,6rem)] leading-[0.95] text-balance">
-            {intro.title}
-          </Heading>
-          <p className="mt-4 text-sm font-medium">{intro.hint}</p>
+      <div ref={stageRef} className="sticky top-16 flex h-[calc(100svh-4rem)] flex-col overflow-hidden lg:block">
+        <div className="relative h-[56%] shrink-0 lg:absolute lg:inset-0 lg:h-auto">
+          <canvas ref={canvasRef} aria-hidden className="absolute inset-0 size-full" />
+          <div aria-hidden className="absolute inset-x-0 bottom-0 h-10 bg-linear-to-b from-transparent to-studio lg:hidden" />
         </div>
 
-        <ol
-          aria-label={labels.steps}
-          className="absolute inset-x-4 bottom-20 z-10 sm:inset-x-6 lg:inset-x-auto lg:bottom-auto lg:start-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))] lg:top-[30%] lg:w-[22rem]"
-        >
-          {captions.map((c, i) => {
-            const on = p >= c.from && p < c.to;
-            return (
-              <li
-                key={c.title}
-                aria-current={on ? 'step' : undefined}
-                className={cn(
-                  'absolute inset-x-0 bottom-0 rounded-3xl bg-studio/70 p-5 backdrop-blur-sm transition duration-500 motion-reduce:transition-none lg:bottom-auto lg:top-0 lg:bg-transparent lg:p-0 lg:backdrop-blur-none',
-                  on ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-4 opacity-0',
-                )}
-              >
-                <span className="grid size-11 place-items-center rounded-full bg-ink font-display text-xl text-bubblegum">
-                  {c.marker ?? i + 1}
-                </span>
-                <p className="mt-3 font-display text-3xl leading-tight sm:text-4xl">{c.title}</p>
-                <p className="mt-2 max-w-[30ch] text-base leading-relaxed text-pretty sm:text-lg">{c.body}</p>
-              </li>
-            );
-          })}
-        </ol>
+        <div className="relative flex-1 lg:static">
+          <div
+            className="absolute inset-x-0 top-0 z-10 mx-auto max-w-7xl px-4 pt-4 sm:px-6 lg:pt-16"
+            style={{ opacity: introOpacity, transform: `translateY(${-24 * (1 - introOpacity)}px)` }}
+          >
+            <Heading className="max-w-[12ch] font-display text-[clamp(2.25rem,7vw,6rem)] leading-[0.95] text-balance">
+              {intro.title}
+            </Heading>
+            <p className="mt-3 text-sm font-medium lg:mt-4">{intro.hint}</p>
+          </div>
 
-        <div
-          inert={!revealOn}
-          className={cn(
-            'absolute inset-x-4 bottom-12 z-10 rounded-3xl bg-studio/75 p-5 backdrop-blur-sm transition duration-500 motion-reduce:transition-none sm:inset-x-6 lg:inset-x-auto lg:start-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))] lg:bottom-24 lg:bg-transparent lg:p-0 lg:backdrop-blur-none',
-            revealOn ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-4 opacity-0',
-          )}
-        >
-          <p className="font-display text-4xl leading-none sm:text-5xl">{reveal.title}</p>
-          {reveal.meta ? <p className="mt-3 text-xl font-semibold tabular-nums">{reveal.meta}</p> : null}
-          {reveal.body ? <p className="mt-3 max-w-md text-lg leading-relaxed text-pretty">{reveal.body}</p> : null}
-          <div className="mt-5">{reveal.action}</div>
+          <ol
+            aria-label={labels.steps}
+            className={cn('absolute inset-x-4 top-4 z-10 sm:inset-x-6 lg:inset-x-auto lg:top-[30%] lg:w-[22rem]', textStart)}
+          >
+            {captions.map((c, i) => {
+              const on = p >= c.from && p < c.to;
+              return (
+                <li
+                  key={c.title}
+                  aria-current={on ? 'step' : undefined}
+                  className={cn(
+                    'absolute inset-x-0 top-0 grid grid-cols-[auto_1fr] items-start gap-x-4 transition duration-500 motion-reduce:transition-none lg:block',
+                    on ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-3 opacity-0',
+                  )}
+                >
+                  <span className="row-span-2 grid size-10 place-items-center rounded-full bg-ink font-display text-lg text-bubblegum lg:size-11 lg:text-xl">
+                    {c.marker ?? i + 1}
+                  </span>
+                  <p className="font-display text-2xl leading-tight sm:text-3xl lg:mt-3 lg:text-4xl">{c.title}</p>
+                  <p className="mt-1 max-w-[32ch] text-[0.95rem] leading-relaxed text-pretty sm:text-base lg:mt-2 lg:text-lg">
+                    {c.body}
+                  </p>
+                </li>
+              );
+            })}
+          </ol>
+
+          <div
+            inert={!revealOn}
+            className={cn(
+              'absolute inset-x-4 top-4 z-10 transition duration-500 motion-reduce:transition-none sm:inset-x-6 lg:inset-x-auto lg:top-auto lg:bottom-24',
+              textStart,
+              revealOn ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-3 opacity-0',
+            )}
+          >
+            <p className="font-display text-3xl leading-none sm:text-4xl lg:text-5xl">{reveal.title}</p>
+            {reveal.meta ? <p className="mt-2 text-lg font-semibold tabular-nums lg:mt-3 lg:text-xl">{reveal.meta}</p> : null}
+            {reveal.body ? (
+              <p className="mt-2 max-w-md text-[0.95rem] leading-relaxed text-pretty sm:text-base lg:mt-3 lg:text-lg">
+                {reveal.body}
+              </p>
+            ) : null}
+            <div className="mt-4 lg:mt-5">{reveal.action}</div>
+          </div>
         </div>
 
-        <div aria-hidden className="absolute inset-x-4 bottom-6 z-10 h-0.5 rounded-full bg-ink/15 sm:inset-x-6">
+        <div aria-hidden className="absolute inset-x-4 bottom-5 z-10 h-0.5 rounded-full bg-ink/15 sm:inset-x-6 lg:bottom-6">
           <span
             className="absolute inset-y-0 start-0 w-full origin-left rounded-full bg-ink rtl:origin-right"
             style={{ transform: `scaleX(${p})` }}

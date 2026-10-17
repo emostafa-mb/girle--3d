@@ -36,13 +36,13 @@ export default async function HomePage() {
           body: t('heroSubtitle'),
           action: (
             <div className="flex flex-wrap gap-3">
-              <Button asChild className="h-12 rounded-full bg-ink px-6 text-base text-white hover:bg-ink/85">
+              <Button asChild className="h-11 rounded-full bg-ink px-5 text-sm text-white hover:bg-ink/85 sm:h-12 sm:px-6 sm:text-base">
                 <Link href="/shop">{t('shopCta')}</Link>
               </Button>
               <Button
                 asChild
                 variant="outline"
-                className="h-12 rounded-full border-ink bg-transparent px-6 text-base text-ink hover:bg-ink/10 dark:border-ink dark:bg-transparent dark:hover:bg-ink/10"
+                className="h-11 rounded-full border-ink bg-transparent px-5 text-sm text-ink hover:bg-ink/10 sm:h-12 sm:px-6 sm:text-base dark:border-ink dark:bg-transparent dark:hover:bg-ink/10"
               >
                 <Link href="#routine">{t('routineCta')}</Link>
               </Button>
@@ -50,7 +50,7 @@ export default async function HomePage() {
           ),
         }}
         labels={{ steps: tf('brandSteps') }}
-        portraitZoom={1.3}
+        portraitZoom={1.5}
         portraitFocusEnd={0.62}
       />
 
