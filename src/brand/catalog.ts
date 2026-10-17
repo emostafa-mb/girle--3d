@@ -71,7 +71,7 @@ export const starterProducts: readonly StarterProduct[] = [
     },
     size: { en: '200 ml', ar: '٢٠٠ مل' },
     price: 42000,
-    images: { front: '/products/body-butter-front.jpg', detail: '/products/body-butter-detail.jpg' },
+    images: { front: '/products/body-butter-packshot.jpg', detail: '/products/body-butter-detail.jpg' },
     step: 3,
     stepNote: { en: 'On dry spots, best at night', ar: 'على المناطق الجافة، والأفضل ليلاً' },
   },
