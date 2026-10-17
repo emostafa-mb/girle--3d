@@ -40,7 +40,7 @@ Rules that make scroll films work:
 > its neck. The cap twists on. The camera settles on a front view with the black "Girlé / Body
 > lotion" print, as a large glossy black script letter G rises behind it.
 
-## body-butter (`frames/body-butter-start.png` → `frames/body-butter-end.png`)
+## body-scrub (`frames/body-scrub-start.png` → `frames/body-scrub-end.png`)
 
 > Soft whipped peaks of pale pink body butter float in the pink studio. A wide, thick-walled clear
 > jar lowers into the centre. Whipped pink butter swirls down into the jar like piped cream and
@@ -92,5 +92,5 @@ Shared style for every clip:
 |---|---|---|
 | body-wash | Strawberries, raspberries, pink grapefruit slices and aloe vera leaves fall in slow motion; clear oil drops and juice swirl together into a glossy translucent pink gel | The pink gel spirals down into a clear bottle with a white flip cap; the cap twists on; front view with the black "Girlé / Body wash" print as a black script G rises behind |
 | body-lotion | Coconut halves, sweet almonds, vanilla pods and pieces of shea butter float; coconut milk and golden almond oil swirl together into a silky white lotion | The lotion pours into a smooth white bottle; the flip cap twists on; front view with "Girlé / Body lotion" print, black G rises behind |
-| body-butter | Chunks of shea butter and cocoa butter, rose petals and drops of rosehip oil; they melt and whip together into a fluffy pale-pink butter | The whipped butter swirls into a wide clear jar like piped cream; the white ribbed lid closes; front view with "Girlé / Body butter" print, black G rises behind |
+| body-scrub | Chunks of shea butter and cocoa butter, rose petals and drops of rosehip oil; they melt and whip together into a fluffy pale-pink butter | The whipped butter swirls into a wide clear jar like piped cream; the white ribbed lid closes; front view with "Girlé / Body butter" print, black G rises behind |
 | body-mist | Peony and rose petals, lychee halves and pear slices drift; fine droplets rise from them and gather into a pale pink liquid | The liquid fills a slim clear bottle; the mist pump and clear cap go on; front view with "Girlé / Body mist" print, black G rises behind |

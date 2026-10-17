@@ -21,11 +21,11 @@ test('switching to Arabic sets RTL and Arabic text', async ({ page }) => {
 test('shop lists the line and opens a product page', async ({ page }) => {
   await page.goto('/en/shop');
   await expect(page.getByTestId('product-card')).toHaveCount(4);
-  await page.getByRole('link', { name: /Body butter/ }).first().click();
-  await expect(page).toHaveURL(/\/en\/products\/body-butter$/);
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Body butter');
+  await page.getByRole('link', { name: /Body scrub/ }).first().click();
+  await expect(page).toHaveURL(/\/en\/products\/body-scrub$/);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Body scrub');
   await expect(page.getByTestId('product-price')).toHaveText('EGP 420');
-  await expect(page.getByRole('list', { name: 'How Body butter comes together' }).getByRole('listitem')).toHaveCount(4);
+  await expect(page.getByRole('list', { name: 'How Body scrub comes together' }).getByRole('listitem')).toHaveCount(4);
   await expect(page.getByRole('button', { name: 'Add to bag' })).toBeDisabled();
 });
 
