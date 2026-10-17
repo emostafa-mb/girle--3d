@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { flavors, starterProducts } from '@/brand/catalog';
-import { BRAND_FILM_REVEAL, BRAND_FILM_WINDOWS, filmFrames } from '@/brand/films';
+import { BRAND_FILM_ENDING, BRAND_FILM_REVEAL, BRAND_FILM_WINDOWS, filmFrames } from '@/brand/films';
 import { Reveal } from '@/components/motion/reveal';
 import { SplitHeading } from '@/components/motion/split-heading';
 import { VelocityMarquee } from '@/components/motion/velocity-marquee';
@@ -54,6 +54,8 @@ export default async function HomePage() {
         }}
         labels={{ steps: tf('brandSteps') }}
         portraitZoom={1.5}
+        portraitZoomEnd={1.45}
+        portraitEndAt={BRAND_FILM_ENDING}
         portraitFocusEnd={0.62}
         textSide="left"
       />
