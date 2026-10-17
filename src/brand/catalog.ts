@@ -89,7 +89,7 @@ export const starterProducts: readonly StarterProduct[] = [
     },
     size: { en: '150 ml', ar: '١٥٠ مل' },
     price: 38000,
-    images: { front: '/products/body-mist-front.jpg', detail: '/products/body-mist-detail.jpg' },
+    images: { front: '/products/body-mist-packshot.jpg', detail: '/products/body-mist-detail.jpg' },
     step: 4,
     stepNote: { en: 'Last, and whenever you like', ar: 'في النهاية، ومتى شئتِ' },
   },

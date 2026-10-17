@@ -31,6 +31,7 @@ WASH_GEOMETRY = (640, 100, 430, 150)
 STILLS = {
     'body-lotion': ('lotion.png', (448, 103, 723, 150)),
     'body-butter': ('butter.png', (447, 215, 782, 200)),
+    'body-mist': ('mist.png', (449, 94, 766, 140)),
 }
 
 
