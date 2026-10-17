@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { flavors, type StarterProduct } from '@/brand/catalog';
+import { Tilt } from '@/components/motion/tilt';
 import { localize } from '@/core/i18n/localize';
 import { formatMoney } from '@/core/money';
 import { Link } from '@/i18n/navigation';
@@ -12,7 +13,7 @@ export function ProductCard({ product, locale, currency, sizes }: Props) {
   const [first, second] = flavors.map((f) => product.images[f.id].front);
   return (
     <Link href={`/products/${product.slug}`} className="group block rounded-[1.75rem] outline-offset-4" data-testid="product-card">
-      <div className="relative aspect-[4/5] overflow-hidden rounded-[1.75rem] bg-studio">
+      <Tilt className="relative aspect-[4/5] overflow-hidden rounded-[1.75rem] bg-studio">
         <Image src={first} alt={name} fill sizes={sizes} className="object-cover" />
         <Image
           src={second}
@@ -21,7 +22,7 @@ export function ProductCard({ product, locale, currency, sizes }: Props) {
           sizes={sizes}
           className="object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100 motion-reduce:transition-none"
         />
-      </div>
+      </Tilt>
       <div className="mt-4 px-1">
         <h3 className="font-display text-xl leading-tight sm:text-2xl">{name}</h3>
         <p className="mt-1 text-sm text-pretty text-muted-foreground">{localize(product.tagline, locale)}</p>

@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { starterProducts } from '@/brand/catalog';
+import { Reveal } from '@/components/motion/reveal';
+import { SplitHeading } from '@/components/motion/split-heading';
 import { ProductCard } from '@/components/store/product-card';
 import { getStoreSettings } from '@/server/store';
 
@@ -18,9 +20,11 @@ export default async function ShopPage() {
   ]);
   return (
     <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:py-20">
-      <h1 className="font-display text-5xl sm:text-6xl">{t('title')}</h1>
+      <SplitHeading as="h1" className="font-display text-5xl sm:text-6xl">
+        {t('title')}
+      </SplitHeading>
       <p className="mt-3 text-muted-foreground">{t('intro')}</p>
-      <div className="mt-12 grid grid-cols-2 gap-x-4 gap-y-10 lg:grid-cols-4 lg:gap-x-6">
+      <Reveal className="mt-12 grid grid-cols-2 gap-x-4 gap-y-10 lg:grid-cols-4 lg:gap-x-6">
         {starterProducts.map((p) => (
           <ProductCard
             key={p.slug}
@@ -30,7 +34,7 @@ export default async function ShopPage() {
             sizes="(min-width: 1024px) 25vw, 50vw"
           />
         ))}
-      </div>
+      </Reveal>
     </div>
   );
 }
