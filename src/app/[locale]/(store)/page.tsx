@@ -54,7 +54,8 @@ export default async function HomePage() {
         }}
         labels={{ steps: tf('brandSteps') }}
         portraitZoom={1.5}
-        portraitFocusEnd={0.62}
+        portraitFocusEnd={0.68}
+        textSide="left"
       />
 
       <section aria-labelledby="line-title" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:py-28">
