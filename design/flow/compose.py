@@ -23,25 +23,37 @@ FILMS = {
     'brand': [
         # opening: products and drops falling (cut before that clip's own G appears)
         (0.0, 3.6, ('video', 'Cosmetics_products_drop_on_floor_20261017205059.mp4', 0.0, 3.6)),
-        (3.0, 6.6, ('video', 'Fruit_pieces_and_oil_splash_20261017201611.mp4', 2.0, 5.6)),
-        (6.0, 9.6, ('video', 'Ingredients_whipping_into_pink_b…_20261017203443.mp4', 0.8, 4.4)),
-        (9.0, 12.6, ('video', 'Coconut_milk_and_oil_swirl_20261017203607.mp4', 1.5, 5.1)),
-        (12.0, 15.6, ('video', 'Fruits_and_petals_drifting_20261017204030.mp4', 1.5, 5.1)),
+        # one moment per product in routine order, alternating the two flavours
+        (3.0, 6.6, ('video', 'Blueberries_and_gel_ribbon_swirling_20261017220747.mp4', 0.6, 4.2)),
+        (6.0, 9.6, ('video', 'Marshmallows_and_sugar_forming_s…_20261017221126.mp4', 2.0, 5.6)),
+        (9.0, 12.6, ('video', 'Blueberries_and_lotion_swirling_20261017221342.mp4', 0.5, 4.1)),
+        (12.0, 15.6, ('video', 'Marshmallows_splash_into_pink_li…_20261017221433.mp4', 1.0, 4.6)),
         (15.0, 18.5, ('frames', 84, 120)),
     ],
-    'body-scrub': [  # Flow clips were made as 'body butter'; the jar ending prints Body scrub
-        (0.0, 10.0, ('video', 'Ingredients_whipping_into_pink_b…_20261017203443.mp4', 0.0, 10.0)),
-        (9.4, 13.9, ('video', 'Body_butter_jar_closing_20261017203452.mp4', 0.0, 4.5)),  # before Flow's own label
-        (13.3, 16.9, ('frames', 92, 120)),  # the lid settles, the print wraps, the G rises
+    # Flavours: the Blueberry clip, then the Marshmallow clip, then the packaging.
+    'body-wash': [
+        (0.0, 7.6, ('video', 'Blueberries_and_gel_ribbon_swirling_20261017220747.mp4', 0.0, 7.6)),
+        (7.0, 14.6, ('video', 'Gel_ribbon_and_marshmallows_boun…_20261017220830.mp4', 0.2, 7.8)),
+        # the previous film's ending: Flow's bottle with the print wrapped on (compose_wash.py)
+        (14.0, 16.8, ('frames', 132, 150)),
     ],
-    'body-mist': [
-        (0.0, 10.0, ('video', 'Fruits_and_petals_drifting_20261017204030.mp4', 0.0, 10.0)),
-        (9.4, 15.7, ('video', 'Filling_bottle_with_pink_liquid_20261017204022.mp4', 0.0, 6.3)),  # before Flow's label
-        (15.1, 18.0, ('frames', 96, 120)),  # the print wraps, the G rises
+    'body-scrub': [
+        (0.0, 7.6, ('video', 'Blueberries_and_sugar_tumbling_20261017220926.mp4', 0.0, 7.6)),
+        (7.0, 14.6, ('video', 'Marshmallows_and_sugar_forming_s…_20261017221126.mp4', 0.2, 7.8)),
+        (14.0, 18.0, ('video', 'Body_butter_jar_closing_20261017203452.mp4', 0.5, 4.5)),  # before Flow's own label
+        (17.4, 21.0, ('frames', 92, 120)),  # the lid settles, the print wraps, the G rises
+    ],
+    'body-splash': [
+        (0.0, 5.5, ('video', 'Blueberries_dropping_into_liquid_20261017221417.mp4', 0.3, 5.8)),
+        (4.9, 10.4, ('video', 'Marshmallows_splash_into_pink_li…_20261017221433.mp4', 1.0, 6.5)),
+        (9.8, 13.6, ('video', 'Filling_bottle_with_pink_liquid_20261017204022.mp4', 2.5, 6.3)),  # before Flow's label
+        (13.0, 16.0, ('frames', 96, 120)),  # the print wraps, the G rises
     ],
     'body-lotion': [
-        (0.0, 10.0, ('video', 'Coconut_milk_and_oil_swirl_20261017203607.mp4', 0.0, 10.0)),
-        (9.2, 14.4, ('frames', 50, 120)),  # the lotion pours into the real bottle, cap, print, G
+        (0.0, 7.6, ('video', 'Blueberries_and_lotion_swirling_20261017221342.mp4', 0.0, 7.6)),
+        (7.0, 14.6, ('video', 'Creamy_lotion_swirls_and_marshma…_20261017221351.mp4', 0.2, 7.8)),
+        # the previous film's Blender part: lotion pours into the real bottle, cap, print, G
+        (14.0, 18.6, ('frames', 105, 150)),
     ],
 }
 

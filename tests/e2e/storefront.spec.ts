@@ -34,9 +34,22 @@ test('reduced motion shows the film as a still with every step', async ({ page }
   await page.goto('/en/products/body-wash');
   await expect(page.locator('canvas')).toHaveCount(0);
   const steps = page.getByRole('list', { name: 'How Body wash comes together' }).getByRole('listitem');
-  await expect(steps).toHaveCount(4);
+  await expect(steps).toHaveCount(3);
   await expect(steps.first()).toBeVisible();
   await expect(page.getByRole('link', { name: 'See details' })).toBeVisible();
+});
+
+test('flavour picker switches the product photos', async ({ page }) => {
+  await page.goto('/en/products/body-splash');
+  await expect(page.getByRole('heading', { level: 2, name: 'Body splash' })).toBeVisible();
+  const details = page.getByTestId('product-details');
+  await expect(details.getByText('Flavour: Blueberry')).toBeVisible();
+  await expect(details.getByRole('img').first()).toHaveAttribute('src', /body-splash-blueberry-packshot/);
+  await details.getByRole('link', { name: 'Marshmallow' }).click();
+  await expect(page).toHaveURL(/\/en\/products\/body-splash\?flavor=marshmallow$/);
+  await expect(details.getByText('Flavour: Marshmallow')).toBeVisible();
+  await expect(details.getByRole('link', { name: 'Marshmallow' })).toHaveAttribute('aria-current', 'true');
+  await expect(details.getByRole('img').first()).toHaveAttribute('src', /body-splash-marshmallow-packshot/);
 });
 
 test('unknown product shows not found', async ({ page }) => {

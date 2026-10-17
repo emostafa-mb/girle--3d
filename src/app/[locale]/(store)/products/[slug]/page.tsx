@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
-import { findStarterProduct, starterProducts } from '@/brand/catalog';
+import { findFlavor, findStarterProduct, flavors, starterProducts } from '@/brand/catalog';
 import { filmFrames, productFilmReveal, productFilmStages } from '@/brand/films';
 import { ScrollFilm } from '@/components/store/scroll-film';
 import { Button } from '@/components/ui/button';
@@ -10,9 +10,13 @@ import { localize } from '@/core/i18n/localize';
 import { formatMoney } from '@/core/money';
 import { Link } from '@/i18n/navigation';
 import { jsonForScript } from '@/lib/json-script';
+import { cn } from '@/lib/utils';
 import { getStoreSettings } from '@/server/store';
 
-type Props = { params: Promise<{ locale: string; slug: string }> };
+type Props = {
+  params: Promise<{ locale: string; slug: string }>;
+  searchParams: Promise<{ flavor?: string | string[] }>;
+};
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;
@@ -21,14 +25,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: localize(product.name, locale),
     description: localize(product.description, locale),
-    openGraph: { images: [product.images.front] },
+    openGraph: { images: [product.images[flavors[0].id].front] },
   };
 }
 
-export default async function ProductPage({ params }: Props) {
-  const { locale, slug } = await params;
+export default async function ProductPage({ params, searchParams }: Props) {
+  const [{ locale, slug }, query] = await Promise.all([params, searchParams]);
   const product = findStarterProduct(slug);
   if (!product) notFound();
+  const flavor = findFlavor(query.flavor);
+  const images = product.images[flavor.id];
   const [t, tf, settings] = await Promise.all([getTranslations('product'), getTranslations('film'), getStoreSettings()]);
   const name = localize(product.name, locale);
   // Arabic copy uses Arabic-Indic digits, matching prices and sizes.
@@ -41,7 +47,7 @@ export default async function ProductPage({ params }: Props) {
     '@type': 'Product',
     name: `${localize(settings.storeName, locale)} ${name}`,
     description: localize(product.description, locale),
-    image: [product.images.front, product.images.detail],
+    image: flavors.flatMap((f) => [product.images[f.id].front, product.images[f.id].detail]),
     brand: { '@type': 'Brand', name: localize(settings.storeName, 'en') },
     offers: {
       '@type': 'Offer',
@@ -87,14 +93,14 @@ export default async function ProductPage({ params }: Props) {
       </Link>
       <div className="mt-6 grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:gap-16">
         <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 sm:mx-0 sm:px-0 lg:flex-col lg:overflow-visible">
-          {[product.images.front, product.images.detail].map((src, i) => (
+          {[images.front, images.detail].map((src, i) => (
             <div
               key={src}
               className="relative aspect-[4/5] w-[85%] shrink-0 snap-center overflow-hidden rounded-[2rem] bg-studio sm:w-[70%] lg:w-full"
             >
               <Image
                 src={src}
-                alt={t('gallery', { name, index: num(i + 1) })}
+                alt={t('gallery', { name: `${name}, ${localize(flavor.name, locale)}`, index: num(i + 1) })}
                 fill
                 sizes="(min-width: 1024px) 55vw, 85vw"
                 className="object-cover"
@@ -122,6 +128,34 @@ export default async function ProductPage({ params }: Props) {
             </div>
           </dl>
 
+          <fieldset className="mt-8">
+            <legend className="text-sm font-medium">
+              {t('flavor')}: <span className="text-muted-foreground">{localize(flavor.name, locale)}</span>
+            </legend>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {flavors.map((f) => {
+                const on = f.id === flavor.id;
+                return (
+                  <Link
+                    key={f.id}
+                    href={`/products/${product.slug}?flavor=${f.id}`}
+                    replace
+                    scroll={false}
+                    aria-current={on ? 'true' : undefined}
+                    data-testid="flavor-option"
+                    className={cn(
+                      'inline-flex h-11 items-center gap-2.5 rounded-full border-2 ps-2 pe-4 text-sm font-medium transition-colors',
+                      on ? 'border-ink bg-ink text-white' : 'border-border hover:border-ink',
+                    )}
+                  >
+                    <span aria-hidden className="size-7 rounded-full ring-1 ring-black/10" style={{ backgroundColor: f.swatch }} />
+                    {localize(f.name, locale)}
+                  </Link>
+                );
+              })}
+            </div>
+          </fieldset>
+
           <div className="mt-8">
             <Button disabled className="h-12 w-full rounded-full text-base" aria-describedby="ordering-note">
               {t('addToBag')}
@@ -138,11 +172,11 @@ export default async function ProductPage({ params }: Props) {
 
           <h3 className="mt-10 text-lg font-semibold">{next ? t('next') : t('first')}</h3>
           <Link
-            href={`/products/${pairing.slug}`}
+            href={`/products/${pairing.slug}?flavor=${flavor.id}`}
             className="group mt-3 flex items-center gap-4 rounded-[1.5rem] bg-petal p-3 pe-5"
           >
             <span className="relative size-20 shrink-0 overflow-hidden rounded-2xl bg-studio">
-              <Image src={pairing.images.front} alt="" fill sizes="80px" className="object-cover" />
+              <Image src={pairing.images[flavor.id].front} alt="" fill sizes="80px" className="object-cover" />
             </span>
             <span className="flex-1">
               <span className="block font-display text-xl group-hover:underline">{localize(pairing.name, locale)}</span>

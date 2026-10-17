@@ -169,7 +169,7 @@ def body_mist():
     tube = bpy.data.objects.new('mist_tube', cu); tube.data.materials.append(TUBE); coll.objects.link(tube)
     tube.rotation_euler.z = math.radians(-25)
     parts.append(tube)
-    parts.append(band('mist_print', 2.205, 3.4, 7.6, 210, os.path.join(TEX, 'mist.png')))
+    parts.append(band('mist_print', 2.205, 3.4, 7.6, 210, os.path.join(TEX, 'splash.png')))
     return parts, (4.4, 19.15)
 
 def body_butter():

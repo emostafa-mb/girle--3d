@@ -6,7 +6,7 @@
     }
   },
   "meta": {
-    "description": "GIRLÉ body care: body wash, body scrub, body lotion and body mist, made to layer."
+    "description": "GIRLÉ body care: body wash, body scrub, body lotion and body splash in Blueberry and Marshmallow, made to layer."
   },
   "nav": {
     "home": "Home",
@@ -19,7 +19,7 @@
   },
   "home": {
     "heroTitle": "Your new body routine is pink.",
-    "heroSubtitle": "Wash, scrub, lotion and mist: the first four from GIRLÉ, made to layer from shower to street.",
+    "heroSubtitle": "Wash, scrub, lotion and splash, each in Blueberry and Marshmallow: the first four from GIRLÉ, made to layer from shower to street.",
     "shopCta": "Shop the four",
     "routineCta": "See the routine",
     "lineTitle": "The first four",
@@ -41,7 +41,8 @@
     "addToBag": "Add to bag",
     "orderingSoon": "Online ordering opens soon.",
     "gallery": "{name}, photo {index}",
-    "allProducts": "All products"
+    "allProducts": "All products",
+    "flavor": "Flavour"
   },
   "film": {
     "hint": "Scroll to watch it come together",
