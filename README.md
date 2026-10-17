@@ -54,6 +54,15 @@ CI (`.github/workflows/ci.yml`) runs all of the above on every push and pull req
 - `src/i18n/messages` — English and Arabic UI text
 - `prisma/` — schema, migrations, seed
 
+## Deploying to Vercel
+
+1. Add a Postgres database to the Vercel project (Storage → Neon, or any hosted Postgres) so
+   `DATABASE_URL` is set for Production and Preview.
+2. Add `SEED_ADMIN_EMAIL` and `SEED_ADMIN_PASSWORD` (and optionally `SEED_ADMIN_NAME`, `STORE_SLUG`)
+   under Settings → Environment Variables.
+3. Deploy. Vercel runs `npm run vercel-build`, which applies migrations, runs the seed (safe to
+   repeat: it only creates what is missing) and builds the app.
+
 ## Changing the database schema
 
 ```bash
