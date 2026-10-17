@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { findStarterProduct, starterProducts } from '@/brand/catalog';
+import { ProductViewer } from '@/components/store/product-viewer';
 import { Button } from '@/components/ui/button';
 import { localize } from '@/core/i18n/localize';
 import { formatMoney } from '@/core/money';
@@ -56,21 +57,21 @@ export default async function ProductPage({ params }: Props) {
       </Link>
       <div className="mt-6 grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:gap-16">
         <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 sm:mx-0 sm:px-0 lg:flex-col lg:overflow-visible">
-          {[product.images.front, product.images.angle].map((src, i) => (
-            <div
-              key={src}
-              className="relative aspect-[4/5] w-[85%] shrink-0 snap-center overflow-hidden rounded-[2rem] bg-studio sm:w-[70%] lg:w-full"
-            >
-              <Image
-                src={src}
-                alt={t('gallery', { name, index: num(i + 1) })}
-                fill
-                preload={i === 0}
-                sizes="(min-width: 1024px) 55vw, 85vw"
-                className="object-cover"
-              />
-            </div>
-          ))}
+          <div
+            className="relative aspect-[4/5] w-[85%] shrink-0 snap-center overflow-hidden rounded-[2rem] bg-studio sm:w-[70%] lg:w-full"
+            data-testid="product-3d"
+          >
+            <ProductViewer src={product.model} poster={product.images.front} name={name} />
+          </div>
+          <div className="relative aspect-[4/5] w-[85%] shrink-0 snap-center overflow-hidden rounded-[2rem] bg-studio sm:w-[70%] lg:w-full">
+            <Image
+              src={product.images.angle}
+              alt={t('gallery', { name, index: num(2) })}
+              fill
+              sizes="(min-width: 1024px) 55vw, 85vw"
+              className="object-cover"
+            />
+          </div>
         </div>
 
         <div className="lg:sticky lg:top-24 lg:self-start">

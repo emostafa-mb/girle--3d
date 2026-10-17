@@ -41,7 +41,13 @@
     "addToBag": "Add to bag",
     "orderingSoon": "Online ordering opens soon.",
     "gallery": "{name}, photo {index}",
-    "allProducts": "All products"
+    "allProducts": "All products",
+    "viewer": {
+      "label": "{name} in 3D. Drag to turn it around.",
+      "hint": "Drag to turn it, pinch to zoom",
+      "ar": "See it in your space",
+      "badge": "3D"
+    }
   },
   "auth": {
     "signInTitle": "Sign in",
