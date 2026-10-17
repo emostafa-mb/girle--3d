@@ -111,11 +111,13 @@ export function ScrollFilm({
       if (!im) return;
       const cw = canvas.width, ch = canvas.height, iw = im.naturalWidth, ih = im.naturalHeight;
       const cover = Math.max(cw / iw, ch / ih);
-      if (cw / ch >= 0.9) {
+      // Wide stage (lg up, words beside the film): fill it. Below lg the words sit under the film, so
+      // frame it for the phone however wide the stage is (browser bars can make it wider than tall).
+      if (window.innerWidth >= 1024 && cw / ch >= 0.9) {
         ctx.drawImage(im, (cw - iw * cover) / 2, (ch - ih * cover) / 2, iw * cover, ih * cover);
         return;
       }
-      // portrait: show more of the frame and feather its top and bottom into the studio pink
+      // phone: show more of the frame and feather its top and bottom into the studio pink
       const studio = getComputedStyle(stageEl).getPropertyValue('--studio').trim() || '#e9a5b7';
       ctx.fillStyle = studio;
       ctx.fillRect(0, 0, cw, ch);
