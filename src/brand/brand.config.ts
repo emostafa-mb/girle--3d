@@ -10,8 +10,8 @@ export const brand: {
   enabledLocales: readonly Locale[];
   currency: string;
 } = {
-  name: { en: 'My Store', ar: 'متجري' },
-  primaryColor: '#e8590c',
+  name: { en: 'GIRLÉ', ar: 'GIRLÉ' },
+  primaryColor: '#000000',
   radius: 0.75,
   defaultLocale: 'en',
   enabledLocales: ['en', 'ar'],

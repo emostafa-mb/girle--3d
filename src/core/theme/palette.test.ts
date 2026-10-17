@@ -35,6 +35,15 @@ describe('buildThemeCss', () => {
     expect(css).toContain('--ring:#000080;');
     expect(css).toContain('--radius:0.5rem;');
   });
+  it('keeps a primary that stays readable on the dark background', () => {
+    const css = buildThemeCss({ primaryColor: '#f4b1c3', radius: 0.5 });
+    expect(css).not.toContain('}html.dark{');
+  });
+  it('swaps a primary that disappears on the dark background for white in dark mode', () => {
+    const css = buildThemeCss({ primaryColor: '#000000', radius: 0.5 });
+    expect(css).toContain('--primary:#000000;');
+    expect(css).toContain('}html.dark{--primary:#ffffff;--primary-foreground:#000000;--ring:#ffffff;}');
+  });
   it('sanitizes bad values instead of emitting broken CSS', () => {
     const css = buildThemeCss({ primaryColor: 'javascript:alert(1)', radius: Number.NaN });
     expect(css).toContain(`--primary:${DEFAULT_PRIMARY};`);

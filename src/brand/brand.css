@@ -1,0 +1,55 @@
+/*
+ * GIRLÉ brand tokens. `html:root` / `html.dark` outrank the shadcn `:root` / `.dark`
+ * defaults in globals.css, which load after this file.
+ */
+@theme inline {
+  --color-bubblegum: var(--bubblegum);
+  --color-petal: var(--petal);
+  --color-ink: var(--ink);
+  --color-studio: var(--studio);
+}
+
+/* The display faces ship one weight; never let the browser fake bold or italic. */
+@utility font-display {
+  font-family: var(--font-display-latin), var(--font-display-arabic), ui-serif, serif;
+  font-weight: 400;
+  font-synthesis: none;
+}
+
+/* Shrikhand has no Arabic; lead with Lalezar so Arabic never drops to Shrikhand's system fallback. */
+[dir='rtl'] .font-display {
+  font-family: var(--font-display-arabic), var(--font-display-latin), ui-serif, serif;
+}
+
+html:root {
+  --bubblegum: #f4b1c3;
+  /* Backdrop tone of the product renders, for edges that meet a photo. */
+  --studio: #e9a5b7;
+  --petal: #fdeef3;
+  --ink: #000000;
+  --background: #ffffff;
+  --foreground: #000000;
+  --card: #ffffff;
+  --card-foreground: #000000;
+  --muted: #fdeef3;
+  --muted-foreground: #6b5158;
+  --accent: #fdeef3;
+  --accent-foreground: #000000;
+  --border: #f2d3dd;
+  --input: #e9c3cf;
+}
+
+html.dark {
+  --petal: #24151b;
+  --background: #000000;
+  --foreground: #ffffff;
+  --card: #120a0e;
+  --card-foreground: #ffffff;
+  --popover: #120a0e;
+  --muted: #24151b;
+  --muted-foreground: #dcbcc6;
+  --accent: #24151b;
+  --accent-foreground: #ffffff;
+  --border: #3d2731;
+  --input: #4a2f3b;
+}

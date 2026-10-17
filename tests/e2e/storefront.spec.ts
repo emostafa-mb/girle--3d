@@ -6,7 +6,7 @@ test('root redirects to English home, LTR', async ({ page }) => {
   await page.goto('/');
   await expect(page).toHaveURL(/\/en$/);
   await expect(page.locator('html')).toHaveAttribute('dir', 'ltr');
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Welcome to My Store');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Your new body routine is pink.');
 });
 
 test('switching to Arabic sets RTL and Arabic text', async ({ page }) => {
@@ -15,7 +15,22 @@ test('switching to Arabic sets RTL and Arabic text', async ({ page }) => {
   await expect(page).toHaveURL(/\/ar$/);
   await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
   await expect(page.locator('html')).toHaveAttribute('lang', 'ar');
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('أهلاً بك في متجري');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('روتين جسمك الجديد وردي.');
+});
+
+test('shop lists the line and opens a product page', async ({ page }) => {
+  await page.goto('/en/shop');
+  await expect(page.getByTestId('product-card')).toHaveCount(4);
+  await page.getByRole('link', { name: /Body butter/ }).first().click();
+  await expect(page).toHaveURL(/\/en\/products\/body-butter$/);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Body butter');
+  await expect(page.getByTestId('product-price')).toHaveText('EGP 420');
+  await expect(page.getByRole('button', { name: 'Add to bag' })).toBeDisabled();
+});
+
+test('unknown product shows not found', async ({ page }) => {
+  const res = await page.goto('/en/products/nope');
+  expect(res?.status()).toBe(404);
 });
 
 test('sign up, sign out, then sign in with different email case', async ({ page }) => {
@@ -30,7 +45,7 @@ test('sign up, sign out, then sign in with different email case', async ({ page 
 
   await page.getByRole('button', { name: 'Sign out' }).click();
   await expect(page).toHaveURL(/\/en$/);
-  await expect(page.getByRole('link', { name: 'Sign in' })).toBeVisible();
+  await expect(page.getByRole('banner').getByRole('link', { name: 'Sign in' })).toBeVisible();
 
   await page.goto('/en/auth/signin');
   await page.getByLabel('Email').fill(`  ${email.toUpperCase()} `);

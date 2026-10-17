@@ -1,15 +1,106 @@
+import Image from 'next/image';
 import { getLocale, getTranslations } from 'next-intl/server';
+import { starterProducts } from '@/brand/catalog';
+import { ProductCard } from '@/components/store/product-card';
+import { Button } from '@/components/ui/button';
+import { isRtl } from '@/core/i18n/locales';
 import { localize } from '@/core/i18n/localize';
+import { Link } from '@/i18n/navigation';
 import { getStoreSettings } from '@/server/store';
 
 export default async function HomePage() {
   const [locale, t, settings] = await Promise.all([getLocale(), getTranslations('home'), getStoreSettings()]);
+  const rtl = isRtl(locale);
   return (
-    <section className="mx-auto max-w-7xl px-4 py-24 text-center">
-      <h1 className="text-4xl font-bold tracking-tight md:text-6xl">
-        {t('heroTitle', { storeName: localize(settings.storeName, locale) })}
-      </h1>
-      <p className="mt-4 text-lg text-muted-foreground">{t('heroSubtitle')}</p>
-    </section>
+    <>
+      <section className="relative isolate overflow-hidden bg-studio text-ink">
+        <div className="relative z-10 mx-auto max-w-7xl px-4 pt-14 pb-8 sm:px-6 xl:flex xl:min-h-[min(46rem,calc(100dvh-4rem))] xl:items-center xl:py-24">
+          <div className="max-w-xl xl:max-w-[34rem]">
+            <h1 className="font-display text-[clamp(3rem,7.4vw,6rem)] leading-[0.95] text-balance">{t('heroTitle')}</h1>
+            <p className="mt-6 max-w-md text-lg leading-relaxed text-pretty">{t('heroSubtitle')}</p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Button asChild className="h-12 rounded-full bg-ink px-6 text-base text-white hover:bg-ink/85">
+                <Link href="/shop">{t('shopCta')}</Link>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                className="h-12 rounded-full border-ink bg-transparent px-6 text-base text-ink hover:bg-ink/10 dark:border-ink dark:bg-transparent dark:hover:bg-ink/10"
+              >
+                <Link href="#routine">{t('routineCta')}</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+        {/* The render keeps the products on the far side of the frame, so on wide screens the
+            headline sits on empty backdrop; narrower screens stack it above a cropped image. */}
+        <div className="relative aspect-[4/3] sm:aspect-[2/1] xl:absolute xl:inset-0 xl:aspect-auto">
+          <Image
+            src={rtl ? '/brand/hero-rtl.jpg' : '/brand/hero.jpg'}
+            alt=""
+            fill
+            preload
+            sizes="100vw"
+            className={
+              rtl
+                ? 'object-cover object-[8%_center] sm:object-[20%_center] xl:object-left'
+                : 'object-cover object-[92%_center] sm:object-[80%_center] xl:object-right'
+            }
+          />
+        </div>
+      </section>
+
+      <section aria-labelledby="line-title" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:py-28">
+        <div className="mb-10">
+          <h2 id="line-title" className="font-display text-4xl sm:text-5xl">
+            {t('lineTitle')}
+          </h2>
+          <p className="mt-3 text-muted-foreground">{t('lineIntro')}</p>
+        </div>
+        <div className="grid grid-cols-2 gap-x-4 gap-y-10 lg:grid-cols-4 lg:gap-x-6">
+          {starterProducts.map((p) => (
+            <ProductCard
+              key={p.slug}
+              product={p}
+              locale={locale}
+              currency={settings.currency}
+              sizes="(min-width: 1024px) 25vw, 50vw"
+            />
+          ))}
+        </div>
+      </section>
+
+      <section id="routine" aria-labelledby="routine-title" className="scroll-mt-16 bg-petal">
+        <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1.25fr_1fr] lg:py-28">
+          <div className="relative aspect-[16/9] overflow-hidden rounded-[2rem] bg-studio">
+            <Image src="/brand/lineup.jpg" alt="" fill sizes="(min-width: 1024px) 55vw, 100vw" className="object-cover" />
+          </div>
+          <div>
+            <h2 id="routine-title" className="font-display text-4xl sm:text-5xl">
+              {t('routineTitle')}
+            </h2>
+            <p className="mt-3 max-w-md text-muted-foreground">{t('routineIntro')}</p>
+            <ol className="mt-8 divide-y divide-ink/10 border-y border-ink/10 dark:divide-white/10 dark:border-white/10">
+              {starterProducts.map((p) => (
+                <li key={p.slug}>
+                  <Link href={`/products/${p.slug}`} className="group flex items-center gap-5 py-4">
+                    <span
+                      aria-hidden
+                      className="grid size-11 shrink-0 place-items-center rounded-full bg-bubblegum font-display text-xl text-ink"
+                    >
+                      {p.step.toLocaleString(locale === 'ar' ? 'ar-EG' : 'en')}
+                    </span>
+                    <span className="flex-1">
+                      <span className="block text-lg font-semibold group-hover:underline">{localize(p.name, locale)}</span>
+                      <span className="block text-sm text-muted-foreground">{localize(p.stepNote, locale)}</span>
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }

@@ -1,4 +1,5 @@
 import { getLocale, getTranslations } from 'next-intl/server';
+import { Wordmark } from '@/components/brand/logo';
 import { LocaleSwitcher } from '@/components/i18n/locale-switcher';
 import { ThemeToggle } from '@/components/theme/theme-toggle';
 import { Button } from '@/components/ui/button';
@@ -15,14 +16,18 @@ export async function SiteHeader() {
     getCurrentCustomer(),
   ]);
   return (
-    <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-7xl items-center gap-6 px-4">
-        <Link href="/" className="text-lg font-bold tracking-tight" data-testid="store-name">
-          {localize(settings.storeName, locale)}
+    <header className="sticky top-0 z-40 border-b bg-background/85 backdrop-blur-md">
+      <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:gap-8 sm:px-6">
+        <Link href="/" className="shrink-0 rounded-md" data-testid="store-name">
+          <Wordmark className="h-7 sm:h-8" />
+          <span className="sr-only">{localize(settings.storeName, locale)}</span>
         </Link>
-        <nav className="hidden items-center gap-6 text-sm md:flex">
-          <Link href="/" className="text-muted-foreground hover:text-foreground">
-            {t('home')}
+        <nav aria-label={t('main')} className="flex items-center gap-5 text-sm font-medium">
+          <Link href="/shop" className="hover:underline hover:underline-offset-4">
+            {t('shop')}
+          </Link>
+          <Link href="/#routine" className="hidden hover:underline hover:underline-offset-4 sm:inline">
+            {t('routine')}
           </Link>
         </nav>
         <div className="ms-auto flex items-center gap-1">
@@ -35,7 +40,7 @@ export async function SiteHeader() {
               </Link>
             </Button>
           ) : (
-            <Button asChild variant="outline" size="sm">
+            <Button asChild size="sm" className="rounded-full px-3.5">
               <Link href="/auth/signin">{t('signIn')}</Link>
             </Button>
           )}

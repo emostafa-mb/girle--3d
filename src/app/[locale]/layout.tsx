@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import { IBM_Plex_Sans_Arabic, Plus_Jakarta_Sans } from 'next/font/google';
+import { IBM_Plex_Sans_Arabic, Instrument_Sans, Lalezar, Shrikhand } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
-import { setRequestLocale } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { ThemeProvider } from '@/components/theme/theme-provider';
 import { isRtl } from '@/core/i18n/locales';
 import { localize } from '@/core/i18n/localize';
@@ -13,7 +13,9 @@ import '../globals.css';
 
 export const dynamic = 'force-dynamic';
 
-const latin = Plus_Jakarta_Sans({ subsets: ['latin'], variable: '--font-latin' });
+const latin = Instrument_Sans({ subsets: ['latin'], variable: '--font-latin' });
+const displayLatin = Shrikhand({ subsets: ['latin'], weight: '400', variable: '--font-display-latin' });
+const displayArabic = Lalezar({ subsets: ['arabic'], weight: '400', variable: '--font-display-arabic' });
 const arabic = IBM_Plex_Sans_Arabic({
   subsets: ['arabic'],
   weight: ['400', '500', '600', '700'],
@@ -24,8 +26,9 @@ type Props = { children: React.ReactNode; params: Promise<{ locale: string }> };
 
 export async function generateMetadata({ params }: Omit<Props, 'children'>): Promise<Metadata> {
   const { locale } = await params;
-  const name = localize((await getStoreSettings()).storeName, locale);
-  return { title: { default: name, template: `%s · ${name}` } };
+  const [settings, t] = await Promise.all([getStoreSettings(), getTranslations({ locale, namespace: 'meta' })]);
+  const name = localize(settings.storeName, locale);
+  return { title: { default: name, template: `%s · ${name}` }, description: t('description') };
 }
 
 export default async function LocaleLayout({ children, params }: Props) {
@@ -38,7 +41,7 @@ export default async function LocaleLayout({ children, params }: Props) {
     <html
       lang={locale}
       dir={isRtl(locale) ? 'rtl' : 'ltr'}
-      className={`${latin.variable} ${arabic.variable}`}
+      className={`${latin.variable} ${arabic.variable} ${displayLatin.variable} ${displayArabic.variable}`}
       suppressHydrationWarning
     >
       <head>

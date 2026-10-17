@@ -1,5 +1,7 @@
 export const DEFAULT_PRIMARY = '#e8590c';
 const DEFAULT_RADIUS = 0.75;
+/** Approximates the `.dark` --background in globals.css. */
+const DARK_BACKGROUND = '#0a0a0a';
 
 export function normalizeHex(input: string | null | undefined, fallback = DEFAULT_PRIMARY): string {
   if (!input) return fallback;
@@ -35,12 +37,14 @@ export function readableForeground(bg: string): '#ffffff' | '#000000' {
 export function buildThemeCss(input: { primaryColor: string; radius: number }): string {
   const primary = normalizeHex(input.primaryColor);
   const radius = Number.isFinite(input.radius) && input.radius >= 0 && input.radius <= 2 ? input.radius : DEFAULT_RADIUS;
-  return (
+  const css =
     `html:root,html.dark{` +
     `--primary:${primary};` +
     `--primary-foreground:${readableForeground(primary)};` +
     `--ring:${primary};` +
     `--radius:${radius}rem;` +
-    `}`
-  );
+    `}`;
+  // A very dark primary (e.g. black) vanishes on the dark background, so dark mode falls back to white.
+  if (contrastRatio(primary, DARK_BACKGROUND) >= 3) return css;
+  return `${css}html.dark{--primary:#ffffff;--primary-foreground:#000000;--ring:#ffffff;}`;
 }

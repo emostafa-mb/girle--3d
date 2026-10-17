@@ -48,6 +48,9 @@ CI (`.github/workflows/ci.yml`) runs all of the above on every push and pull req
 - `src/server` — Next.js glue: sessions, server actions, cached loaders
 - `src/app/[locale]` — pages (`(store)` storefront, `admin` dashboard)
 - `src/brand/brand.config.ts` — per-client defaults (name, colour, locale, currency)
+- `src/brand/brand.css`, `src/brand/catalog.ts` — GIRLÉ colours/fonts and the starter product line
+  (shown until the database catalog lands in milestone 2)
+- `design/packshots` — Blender scene that renders the product photos
 - `src/i18n/messages` — English and Arabic UI text
 - `prisma/` — schema, migrations, seed
 
@@ -60,5 +63,6 @@ npm run db:migrate -- --name describe_change
 ## Troubleshooting
 
 - **Windows: `ERR_SWC_NATIVE_CACHE` from `npm run dev` / `npm run build`** — set
-  `SWC_NATIVE_BINDING_CACHE` to a writable folder, e.g. `.cache/swc` (git-ignored; the
-  e2e server already does this). In Git Bash: `SWC_NATIVE_BINDING_CACHE=.cache/swc npm run dev`.
+  `SWC_NATIVE_BINDING_CACHE` to the absolute path of a writable folder, e.g. this repo's
+  `.cache/swc` (git-ignored; the e2e server already does this). Relative paths are rejected.
+  In Git Bash: `SWC_NATIVE_BINDING_CACHE="$PWD/.cache/swc" npm run dev`.
