@@ -22,11 +22,6 @@ type Props = {
   portraitZoomEnd?: number;
   /** Where (0–1 of the film) the ending starts; the portrait view eases to its end framing just after. */
   portraitEndAt?: number;
-  /**
-   * From lg up the words float beside the film: at the reading start ('start'), or always on the left
-   * ('left') when the frame keeps its empty space there whatever the language.
-   */
-  textSide?: 'start' | 'left';
   className?: string;
 };
 
@@ -49,7 +44,6 @@ export function ScrollFilm({
   portraitFocusEnd = 0.5,
   portraitZoomEnd,
   portraitEndAt = 0.7,
-  textSide = 'start',
   className,
 }: Props) {
   const sectionRef = useRef<HTMLElement>(null);
@@ -211,8 +205,7 @@ export function ScrollFilm({
 
   // Phones: the film fills the top of the screen and the words sit underneath it, never on it.
   // From lg up the film is full-bleed and the words float on its left.
-  const textStart =
-    textSide === 'left' ? 'lg:left-6' : 'lg:start-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))]';
+  const textStart = 'lg:start-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))]';
   return (
     <section ref={sectionRef} className={cn('relative h-[380vh] bg-studio text-ink sm:h-[440vh]', className)}>
       <div ref={stageRef} className="sticky top-16 flex h-[calc(100svh-4rem)] flex-col overflow-hidden lg:block">
@@ -264,10 +257,6 @@ export function ScrollFilm({
             className={cn(
               'absolute inset-x-4 top-4 z-10 transition duration-500 motion-reduce:transition-none sm:inset-x-6 lg:inset-x-auto lg:top-auto lg:bottom-24',
               textStart,
-              // the left-hand space narrows with the screen; below xl the film's crop can reach under
-              // the words, so they get a frosted panel
-              textSide === 'left' &&
-                'lg:w-[min(24rem,26vw)] lg:max-xl:rounded-3xl lg:max-xl:bg-studio/75 lg:max-xl:p-5 lg:max-xl:backdrop-blur-sm',
               revealOn ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-3 opacity-0',
             )}
           >

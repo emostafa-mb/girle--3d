@@ -3,7 +3,8 @@ settle, the real GIRLÉ print (with the flavour name) wraps round onto each one,
 wash ending. The bottles are tracked against the clip's last frame, so a slow camera move carries the
 print with it.
 
-Run from the repo root:  python design/flow/compose_ending.py <product|brand> <downloads> <label folder> <out folder>
+Run from the repo root:  python design/flow/compose_ending.py <product|brand> <downloads> <label folder> <out folder> [frames]
+[frames] defaults to 72 (the scroll films); a played video wants the clip's own rate, e.g. 144 for 6 s at 24 fps.
 <label folder> holds the flavour prints from design/packshots/labels.py. Writes <out folder>/f001.webp ...
 """
 import math
@@ -102,6 +103,7 @@ def wrap(art, radius, offset):
 
 def main():
     product, downloads, labels, out = sys.argv[1], pathlib.Path(sys.argv[2]), pathlib.Path(sys.argv[3]), pathlib.Path(sys.argv[4])
+    count = int(sys.argv[5]) if len(sys.argv) > 5 else FRAMES
     clip, (t0, t1), (w0, w1), bottles = ENDINGS[product]
     frames, fps = read_all(downloads / clip)
     first = int(w0 * fps) - 1
@@ -110,8 +112,8 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
     for old in out.glob('f*.webp'):
         old.unlink()
-    for n in range(FRAMES):
-        t = t0 + n / (FRAMES - 1) * (t1 - t0)
+    for n in range(count):
+        t = t0 + n / (count - 1) * (t1 - t0)
         i = min(len(frames) - 1, round(t * fps))
         rgb = cv2.cvtColor(frames[i], cv2.COLOR_BGR2RGB).astype(np.float32)
         k = ease((t - w0) / (w1 - w0))
@@ -125,7 +127,7 @@ def main():
                 alpha = layer[..., 3:4] * 0.92
                 region[:] = region * (1 - alpha) + layer[..., :3] * 255 * alpha
         Image.fromarray(rgb.clip(0, 255).astype(np.uint8)).save(out / f'f{n + 1:03d}.webp', 'WEBP', quality=80, method=6)
-    print(f'{product}: {FRAMES} ending frames from {clip[:28]}…')
+    print(f'{product}: {count} ending frames')
 
 
 main()
