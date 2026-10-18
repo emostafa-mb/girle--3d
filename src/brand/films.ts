@@ -17,16 +17,18 @@ export const PRODUCT_FILM_WINDOWS = [
 ] as const;
 export const PRODUCT_FILM_REVEAL = 0.94;
 
-/** Home film (design/flow compose.py 'brand'): products dropping, one Flow moment per product, then the four products landing, printed. */
+/**
+ * Home film (design/flow compose.py 'brand' --video, played as public/films/brand.mp4): products dropping,
+ * one Flow moment per product, then the four products landing, printed. Windows are fractions of its 21 s.
+ */
 export const BRAND_FILM_WINDOWS = [
-  [0.16, 0.28],
-  [0.31, 0.43],
-  [0.46, 0.57],
-  [0.6, 0.72],
+  [0.15, 0.3],
+  [0.3, 0.45],
+  [0.45, 0.59],
+  [0.59, 0.76],
 ] as const;
-export const BRAND_FILM_REVEAL = 0.92;
-/** Where the home film's ending (the four products landing) starts. */
-export const BRAND_FILM_ENDING = 0.71;
+/** The closing words come up as the four products land. */
+export const BRAND_FILM_REVEAL = 0.76;
 
 /**
  * Films replaced by Google Flow videos (design/flow): their frame count, caption windows and copy.
@@ -157,7 +159,6 @@ FLOW_FILMS['body-splash'] = flavorFilm(
   ],
 );
 const FILM_COUNTS: Record<string, number> = {
-  brand: 150,
   ...Object.fromEntries(Object.entries(FLOW_FILMS).map(([name, film]) => [name, film.count])),
 };
 
