@@ -4,7 +4,7 @@ import { flavors, starterProducts } from '@/brand/catalog';
 import { BRAND_FILM_ENDING, BRAND_FILM_REVEAL, BRAND_FILM_WINDOWS, filmFrames } from '@/brand/films';
 import { Reveal } from '@/components/motion/reveal';
 import { SplitHeading } from '@/components/motion/split-heading';
-import { VelocityMarquee } from '@/components/motion/velocity-marquee';
+import { Marquee } from '@/components/motion/marquee';
 import { ProductCard } from '@/components/store/product-card';
 import { ScrollFilm } from '@/components/store/scroll-film';
 import { Button } from '@/components/ui/button';
@@ -80,7 +80,7 @@ export default async function HomePage() {
         </Reveal>
       </section>
 
-      <VelocityMarquee
+      <Marquee
         className="bg-ink py-8 text-white sm:py-12 dark:bg-petal"
         rows={[
           {

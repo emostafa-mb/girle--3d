@@ -10,10 +10,10 @@ type Row = { items: React.ReactNode[]; className?: string; /** Drift the other w
 const COPIES = 4;
 
 /**
- * Rows of words that drift sideways forever, run faster while the page scrolls and turn round with
- * the scroll direction. Decorative: hidden from assistive tech, and still for reduced motion.
+ * Rows of words that drift sideways forever at a steady pace, whatever the page's scrolling does.
+ * Rests while off screen. Decorative: hidden from assistive tech, and still for reduced motion.
  */
-export function VelocityMarquee({ rows, className, speed = 2.2 }: { rows: Row[]; className?: string; speed?: number }) {
+export function Marquee({ rows, className, speed = 2.2 }: { rows: Row[]; className?: string; speed?: number }) {
   const ref = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -25,23 +25,16 @@ export function VelocityMarquee({ rows, className, speed = 2.2 }: { rows: Row[];
         const setters = tracks.map((t) => gsap.quickSetter(t, 'xPercent'));
         const wrap = gsap.utils.wrap(-50, 0);
         let offset = 0;
-        let direction = 1;
-        let boost = 1;
         let active = false;
         const trigger = ScrollTrigger.create({
           trigger: root,
           start: 'top bottom',
           end: 'bottom top',
           onToggle: (self) => (active = self.isActive),
-          onUpdate: (self) => {
-            direction = self.direction;
-            boost = Math.max(boost, 1 + Math.min(Math.abs(self.getVelocity()) / 250, 7));
-          },
         });
         const tick = (_time: number, deltaMs: number) => {
           if (!active) return;
-          boost += (1 - boost) * 0.06;
-          offset += (speed * direction * boost * deltaMs) / 1000;
+          offset += (speed * deltaMs) / 1000;
           setters.forEach((set, i) => set(wrap(tracks[i].dataset.reverse ? offset : -offset)));
         };
         gsap.ticker.add(tick);
