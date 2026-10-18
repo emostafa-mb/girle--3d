@@ -1,12 +1,12 @@
 import Image from 'next/image';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { flavors, starterProducts } from '@/brand/catalog';
-import { BRAND_FILM_REVEAL, BRAND_FILM_WINDOWS } from '@/brand/films';
+import { BRAND_FILM_ENDING, BRAND_FILM_REVEAL, BRAND_FILM_WINDOWS, filmFrames } from '@/brand/films';
 import { Reveal } from '@/components/motion/reveal';
 import { SplitHeading } from '@/components/motion/split-heading';
 import { VelocityMarquee } from '@/components/motion/velocity-marquee';
 import { ProductCard } from '@/components/store/product-card';
-import { HeroFilm } from '@/components/store/hero-film';
+import { ScrollFilm } from '@/components/store/scroll-film';
 import { Button } from '@/components/ui/button';
 import { localize } from '@/core/i18n/localize';
 import { Link } from '@/i18n/navigation';
@@ -23,11 +23,9 @@ export default async function HomePage() {
   const num = (n: number) => n.toLocaleString(locale === 'ar' ? 'ar-EG' : 'en');
   return (
     <>
-      <HeroFilm
-        src="/films/brand.mp4"
-        posterStart="/films/brand-start.jpg"
-        posterEnd="/films/brand-end.jpg"
-        title={t('heroTitle')}
+      <ScrollFilm
+        {...filmFrames('brand')}
+        intro={{ title: t('heroTitle'), hint: tf('brandHint') }}
         captions={starterProducts.map((p, i) => ({
           from: BRAND_FILM_WINDOWS[i][0],
           to: BRAND_FILM_WINDOWS[i][1],
@@ -54,7 +52,12 @@ export default async function HomePage() {
             </div>
           ),
         }}
-        labels={{ steps: tf('brandSteps'), play: tf('play'), pause: tf('pause'), replay: tf('replay') }}
+        labels={{ steps: tf('brandSteps') }}
+        portraitZoom={1.5}
+        portraitZoomEnd={1.45}
+        portraitEndAt={BRAND_FILM_ENDING}
+        portraitFocusEnd={0.62}
+        textSide="left"
       />
 
       <section aria-labelledby="line-title" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:py-28">

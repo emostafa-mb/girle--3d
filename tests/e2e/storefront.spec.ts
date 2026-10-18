@@ -52,19 +52,6 @@ test('flavour picker switches the product photos', async ({ page }) => {
   await expect(details.getByRole('img').first()).toHaveAttribute('src', /body-splash-marshmallow-packshot/);
 });
 
-test('home film plays by itself, or waits with the closing words for reduced motion', async ({ page }) => {
-  await page.goto('/en');
-  const video = page.locator('video');
-  await expect.poll(() => video.evaluate((v: HTMLVideoElement) => v.currentTime)).toBeGreaterThan(0.5);
-  await expect(page.getByRole('button', { name: 'Pause the film' })).toBeVisible();
-
-  await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('/en');
-  await expect(page.getByRole('link', { name: 'Shop the four' })).toBeVisible();
-  expect(await video.evaluate((v: HTMLVideoElement) => v.paused)).toBe(true);
-  await expect(page.getByRole('button', { name: 'Play the film' })).toBeVisible();
-});
-
 test('unknown product shows not found', async ({ page }) => {
   const res = await page.goto('/en/products/nope');
   expect(res?.status()).toBe(404);

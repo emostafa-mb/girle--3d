@@ -48,10 +48,8 @@
     "hint": "Scroll to watch it come together",
     "details": "See details",
     "steps": "How {name} comes together",
-    "brandSteps": "The routine, step by step",
-    "play": "Play the film",
-    "pause": "Pause the film",
-    "replay": "Play the film again"
+    "brandHint": "Scroll to meet the line",
+    "brandSteps": "The routine, step by step"
   },
   "auth": {
     "signInTitle": "Sign in",
